@@ -14,11 +14,9 @@ nunjucks.configure('src/modules', {
 
 app.get('/', async (req, res) => {
   const container = configureDependencyInjection();
-  /**
-   * @type {import("./modules/club/repository/json/clubRepository")} ClubRepository
-   */
-  const ClubRepository = container.get('ClubRepository');
-  const clubes = await ClubRepository.getAll();
+
+  const clubService = container.get('ClubService');
+  const clubes = await clubService.getAll();
   res.render('club/views/index.html', { clubes });
 });
 
