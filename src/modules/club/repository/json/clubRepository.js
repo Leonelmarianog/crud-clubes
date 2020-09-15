@@ -17,6 +17,17 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
+   * @param {Number}
+   * @returns {Object}
+   */
+  async getById(id) {
+    const clubsData = this.getData();
+    const club = clubsData.find((clubData) => clubData.id === id);
+    if (!club) throw new ClubNotFoundError(`Can't find club with ${id}`);
+    return new Club(club);
+  }
+
+  /**
    * @returns {Promise<Array<import("../../entity/club")>>}
    */
   async getAll() {

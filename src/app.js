@@ -12,12 +12,18 @@ nunjucks.configure('src/modules', {
   express: app,
 });
 
-app.get('/', async (req, res) => {
-  const container = configureDependencyInjection();
+const container = configureDependencyInjection();
+const clubService = container.get('ClubService');
 
-  const clubService = container.get('ClubService');
+app.get('/', async (req, res) => {
   const clubes = await clubService.getAll();
   res.render('club/views/index.html', { clubes });
+});
+
+app.get('/:id', async (req, res) => {
+  const clubId = Number(req.params.id);
+  const club = await clubService.getById(clubId);
+  res.render('club/views/club.html', { club });
 });
 
 app.listen(port, () => console.log(`Now listening to port ${port}`));
