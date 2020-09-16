@@ -1,5 +1,7 @@
-const uuid = require('uuid');
 const fs = require('fs');
+const path = require('path');
+const uuid = require('uuid');
+const multer = require('multer');
 const { default: DIContainer, object, get, factory } = require('rsdi');
 const { ClubController, ClubService, ClubRepository } = require('../modules/club/module');
 
@@ -17,6 +19,18 @@ function configureMainJSONDatabase() {
   return process.env.JSON_DB_PATH;
 }
 
+function configureMulter() {
+  const storage = multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, process.env.CRESTS_UPLOAD_DIR);
+    },
+    filename(req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname));
+    },
+  });
+  return multer({ storage });
+}
+
 /**
  * @param {DIContainer} container
  */
@@ -25,6 +39,7 @@ function addCommonDefinitions(container) {
     fs,
     uuid: factory(configureUuid),
     JSONDatabase: factory(configureMainJSONDatabase),
+    Multer: factory(configureMulter),
   });
 }
 
@@ -33,7 +48,7 @@ function addCommonDefinitions(container) {
  */
 function addClubModuleDefinitions(container) {
   container.addDefinitions({
-    ClubController: object(ClubController).construct(get('ClubService')),
+    ClubController: object(ClubController).construct(get('Multer'), get('ClubService')),
     ClubService: object(ClubService).construct(get('ClubRepository')),
     ClubRepository: object(ClubRepository).construct(get('uuid'), get('fs'), get('JSONDatabase')),
   });

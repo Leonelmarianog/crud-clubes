@@ -5,9 +5,10 @@ class ClubController extends AbstractClubController {
   /**
    * @param {import("../service/clubService")} clubService
    */
-  constructor(clubService) {
+  constructor(uploadMiddleware, clubService) {
     super();
     this.ROUTE_BASE = '/club';
+    this.uploadMiddleware = uploadMiddleware;
     this.clubService = clubService;
   }
 
@@ -21,7 +22,7 @@ class ClubController extends AbstractClubController {
     app.get(`${ROUTE}/view/:id`, this.view.bind(this));
     app.get(`${ROUTE}/create`, this.create.bind(this));
     app.get(`${ROUTE}/update/:id`, this.update.bind(this));
-    app.post(`${ROUTE}/save`, this.save.bind(this));
+    app.post(`${ROUTE}/save`, this.uploadMiddleware.single('crest-url'), this.save.bind(this));
     app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
   }
 

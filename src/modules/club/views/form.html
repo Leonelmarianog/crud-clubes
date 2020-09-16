@@ -2,7 +2,7 @@
 
 {% block content %}
   <div>
-    <form action="/club/save" method="POST">
+    <form action="/club/save" method="POST" enctype="multipart/form-data">
       {% if club.id %}
         <input type="hidden" name="id" value="{{club.id}}" readonly/>
       {% endif %}
@@ -24,7 +24,7 @@
 
       <div>
         <label>Crest:</label>
-        <input type=text name="crest-url" value="{{club.crestUrl}}"/>
+        <input type="file" name="crest-url"/>
       </div>
 
       <div>

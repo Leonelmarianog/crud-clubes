@@ -9,6 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
+app.use('/public', express.static('public'));
 
 nunjucks.configure('src/modules', {
   autoescape: true,

@@ -35,7 +35,13 @@ class ClubRepository extends AbstractClubRepository {
         );
       }
 
+      const oldClubData = clubsData[clubIndex];
       clubsData[clubIndex] = club;
+
+      if (!club.crestUrl) {
+        clubsData[clubIndex].crestUrl = oldClubData.crestUrl;
+      }
+
       clubToSave = club;
     } else {
       clubToSave = { ...club, id: this.uuid() };
