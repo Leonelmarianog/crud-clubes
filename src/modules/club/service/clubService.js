@@ -25,7 +25,6 @@ class ClubService {
    * @returns {Object}
    */
   async getById(id) {
-    console.log(id);
     if (!id) throw new ClubIdNotDefinedError('An id is required to get a club');
     const club = this.clubRepository.getById(id);
     return club;

@@ -24,6 +24,12 @@ app.get('/', async (req, res) => {
   res.render('club/views/index.html', { clubes });
 });
 
+app.get('/update/:id', async (req, res) => {
+  const { id: clubId } = req.params;
+  const clubToUpdate = await clubService.getById(clubId);
+  res.render('club/views/form.html', { club: clubToUpdate });
+});
+
 app.get('/create', (req, res) => {
   res.render('club/views/form.html');
 });

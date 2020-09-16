@@ -3,62 +3,70 @@
 {% block content %}
   <div>
     <form action="/save" method="POST">
+      {% if club.id %}
+        <input type="hidden" name="id" value="{{club.id}}" readonly/>
+      {% endif %}
+      
       <div>
         <label>Name:</label>
-        <input type=text name="name"/>
+        <input type=text name="name" value="{{club.name}}"/>
       </div>
       
       <div>
         <label>Short Name:</label>
-        <input type=text name="short-name"/>
+        <input type=text name="short-name" value="{{club.shortName}}"/>
       </div>
       
       <div>
         <label>TLA:</label>
-        <input type=text name="tla"/>
+        <input type=text name="tla" value="{{club.tla}}"/>
       </div>
 
       <div>
         <label>Crest:</label>
-        <input type=text name="crest-url"/>
+        <input type=text name="crest-url" value="{{club.crestUrl}}"/>
       </div>
 
       <div>
         <label>Address:</label>
-        <input type=text name="address"/>
+        <input type=text name="address" value="{{club.address}}"/>
       </div>
 
       <div>
         <label>Phone:</label>
-        <input type=text name="phone"/>
+        <input type=text name="phone" value="{{club.phone}}"/>
       </div>
 
       <div>
         <label>Website:</label>
-        <input type=text name="website"/>
+        <input type=text name="website" value="{{club.website}}"/>
       </div>
 
       <div>
         <label>Email:</label>
-        <input type=text name="email"/>
+        <input type=text name="email" value="{{club.email}}"/>
       </div>
 
       <div>
         <label>Founded:</label>
-        <input type=text name="founded"/>
+        <input type=text name="founded" value="{{club.founded}}"/>
       </div>
 
       <div>
         <label>Club Colors:</label>
-        <input type=text name="club-colors"/>
+        <input type=text name="club-colors" value="{{club.clubColors}}"/>
       </div>
 
       <div>
         <label>Venue:</label>
-        <input type=text name="venue"/>
+        <input type=text name="venue" value="{{club.venue}}"/>
       </div>
       
-      <button type="submit">Add Club</button>
+      {% if club %}
+        <button type="submit">Update Club</button>
+      {% else %}
+        <button type="submit">Create Club</button>
+      {% endif %}
     </form>
   </div>
 {% endblock content %}
