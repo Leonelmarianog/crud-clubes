@@ -4,6 +4,7 @@ const AbstractClubRepository = require('./abstractClubRepository');
 const Club = require('../../entity/club');
 const ClubNotDefinedError = require('../error/clubNotDefinedError');
 const ClubNotFoundError = require('../error/clubNotFoundError');
+const ClubIdNotDefinedError = require('../error/clubIdNotDefinedError');
 
 class ClubRepository extends AbstractClubRepository {
   /**
@@ -42,6 +43,21 @@ class ClubRepository extends AbstractClubRepository {
     }
     this.saveData(clubsData);
     return new Club(clubToSave);
+  }
+
+  /**
+   * @param {Number} id
+   * @returns {Boolean}
+   */
+  async delete(id) {
+    const clubsData = this.getData();
+    const clubIndex = clubsData.findIndex((clubData) => clubData.id == id);
+    if (clubIndex === -1) {
+      throw new ClubNotFoundError(`Can't delete club with id ${id} because it doesn't exist`);
+    }
+    clubsData.splice(clubIndex, 1);
+    this.saveData(clubsData);
+    return true;
   }
 
   /**

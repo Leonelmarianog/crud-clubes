@@ -22,6 +22,16 @@ class ClubService {
 
   /**
    * @param {Number} id
+   * @returns {Boolean}
+   */
+  async delete(id) {
+    if (!id) throw new ClubIdNotDefinedError(`An id is required to delete a club`);
+    const isDeleted = this.clubRepository.delete(id);
+    return isDeleted;
+  }
+
+  /**
+   * @param {Number} id
    * @returns {Object}
    */
   async getById(id) {

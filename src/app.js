@@ -41,6 +41,12 @@ app.post('/save', async (req, res) => {
   res.redirect(`/${savedClub.id}`);
 });
 
+app.get('/delete/:id', async (req, res) => {
+  const { id: clubId } = req.params;
+  await clubService.delete(clubId);
+  res.redirect('/');
+});
+
 app.get('/:id', async (req, res) => {
   const clubId = req.params.id;
   const club = await clubService.getById(clubId);
