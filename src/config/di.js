@@ -1,7 +1,8 @@
 const uuid = require('uuid');
 const fs = require('fs');
 const { default: DIContainer, object, get, factory } = require('rsdi');
-const { ClubService, ClubRepository } = require('../modules/club/module');
+const { ClubController, ClubService, ClubRepository } = require('../modules/club/module');
+
 /**
  * @returns {Function}
  */
@@ -32,6 +33,7 @@ function addCommonDefinitions(container) {
  */
 function addClubModuleDefinitions(container) {
   container.addDefinitions({
+    ClubController: object(ClubController).construct(get('ClubService')),
     ClubService: object(ClubService).construct(get('ClubRepository')),
     ClubRepository: object(ClubRepository).construct(get('uuid'), get('fs'), get('JSONDatabase')),
   });

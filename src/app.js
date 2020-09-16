@@ -2,9 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const nunjucks = require('nunjucks');
 
-const fromDataToEntity = require('./modules/club/mapper/clubMapper');
-
 const configureDependencyInjection = require('./config/di');
+const { init: initClubModule } = require('./modules/club/module');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,40 +16,11 @@ nunjucks.configure('src/modules', {
 });
 
 const container = configureDependencyInjection();
-const clubService = container.get('ClubService');
 
-app.get('/', async (req, res) => {
-  const clubes = await clubService.getAll();
-  res.render('club/views/index.html', { clubes });
-});
+initClubModule(app, container);
 
-app.get('/update/:id', async (req, res) => {
-  const { id: clubId } = req.params;
-  const clubToUpdate = await clubService.getById(clubId);
-  res.render('club/views/form.html', { club: clubToUpdate });
-});
-
-app.get('/create', (req, res) => {
-  res.render('club/views/form.html');
-});
-
-app.post('/save', async (req, res) => {
-  const clubData = { ...req.body };
-  const club = fromDataToEntity(clubData);
-  const savedClub = await clubService.save(club);
-  res.redirect(`/${savedClub.id}`);
-});
-
-app.get('/delete/:id', async (req, res) => {
-  const { id: clubId } = req.params;
-  await clubService.delete(clubId);
-  res.redirect('/');
-});
-
-app.get('/:id', async (req, res) => {
-  const clubId = req.params.id;
-  const club = await clubService.getById(clubId);
-  res.render('club/views/club.html', { club });
+app.get('/', (req, res) => {
+  res.redirect('/club');
 });
 
 app.listen(port, () => console.log(`Now listening to port ${port}`));
