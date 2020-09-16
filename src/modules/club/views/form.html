@@ -1,0 +1,64 @@
+{% extends "views/layouts/base.html" %}
+
+{% block content %}
+  <div>
+    <form action="/save" method="POST">
+      <div>
+        <label>Name:</label>
+        <input type=text name="name"/>
+      </div>
+      
+      <div>
+        <label>Short Name:</label>
+        <input type=text name="short-name"/>
+      </div>
+      
+      <div>
+        <label>TLA:</label>
+        <input type=text name="tla"/>
+      </div>
+
+      <div>
+        <label>Crest:</label>
+        <input type=text name="crest-url"/>
+      </div>
+
+      <div>
+        <label>Address:</label>
+        <input type=text name="address"/>
+      </div>
+
+      <div>
+        <label>Phone:</label>
+        <input type=text name="phone"/>
+      </div>
+
+      <div>
+        <label>Website:</label>
+        <input type=text name="website"/>
+      </div>
+
+      <div>
+        <label>Email:</label>
+        <input type=text name="email"/>
+      </div>
+
+      <div>
+        <label>Founded:</label>
+        <input type=text name="founded"/>
+      </div>
+
+      <div>
+        <label>Club Colors:</label>
+        <input type=text name="club-colors"/>
+      </div>
+
+      <div>
+        <label>Venue:</label>
+        <input type=text name="venue"/>
+      </div>
+      
+      <button type="submit">Add Club</button>
+    </form>
+  </div>
+{% endblock content %}
