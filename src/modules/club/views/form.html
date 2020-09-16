@@ -2,7 +2,7 @@
 
 {% block content %}
   <div>
-    <form action="/save" method="POST">
+    <form action="/club/save" method="POST">
       {% if club.id %}
         <input type="hidden" name="id" value="{{club.id}}" readonly/>
       {% endif %}
@@ -68,5 +68,6 @@
         <button type="submit">Create Club</button>
       {% endif %}
     </form>
+    <a href="/club">Go to Index</a>
   </div>
 {% endblock content %}

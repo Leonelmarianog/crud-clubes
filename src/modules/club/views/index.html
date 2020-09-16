@@ -1,8 +1,19 @@
 {% extends "views/layouts/base.html" %}
 
 {% block content %}
-  <div>Clubes:</div>
-  {% for club in clubes %}
-    <div>{{ club.name }}</div>
-  {% endfor %}
+<div>
+  <table>
+    <tbody>
+      {% for club in clubes %}
+      <tr>
+        <td>{{ club.name }}</td>
+        <td><a href="/club/view/{{ club.id }}">View</a></td>
+        <td><a href="/club/update/{{ club.id }}">Edit</a></td>
+        <td><a href="/club/delete/{{ club.id }}">Delete</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="club/create">Add new club</a>
+</div>
 {% endblock content %}
