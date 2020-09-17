@@ -1,7 +1,36 @@
 {% extends "views/layouts/base.html" %}
 
 {% block content %}
-<div>
+<div class="text-center">
+  <a href="/club" class="btn btn-primary">Go to Index</a>
+</div>
+
+<div class="row m-4">
+  <div class="col-sm-6 col-md-6 col-lg-6 my-auto">
+    <img src="{{ club.crestUrl }}" alt="crest" class="img-fluid img-thumbnail d-block mx-auto">
+  </div>
+  <div class="col-sm-6 col-md-6 col-lg-6 mt-4 mt-sm-0">
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Name: </strong>{{ club.name }}</li>
+        <li class="list-group-item"><strong>Short Name: </strong>{{ club.shortName }}</li>
+        <li class="list-group-item"><strong>TLA: </strong>{{ club.tla }}</li>
+        <li class="list-group-item"><strong>Address: </strong>{{ club.address }}</li>
+        <li class="list-group-item"><strong>Phone: </strong>{{ club.phone if club.phone else 'Empty' }}</li>
+        <li class="list-group-item"><strong>Website: </strong><a href="{{ club.website }}">{{ club.website }}</a></li>
+        <li class="list-group-item"><strong>Email: </strong>{{ club.email if club.email else 'Empty'}}</li>
+        <li class="list-group-item"><strong>Founded: </strong>{{ club.founded if club.founded else 'Empty' }}</li>
+        <li class="list-group-item"><strong>Club Colors: </strong>{{ club.clubColors }}</li>
+        <li class="list-group-item"><strong>Venue: </strong>{{ club.venue }}</li>
+    </ul>
+  </div>
+</div>
+
+<div class="text-center">
+  <a href="/club/update/{{ club.id }}" class="btn btn-success">Edit this club</a>
+</div>
+{% endblock content %}
+
+<!-- <div>
   <p>{{club.name}}</p>
   <p>{{club.shortName}}</p>
   <p>{{club.tla}}</p>
@@ -15,4 +44,4 @@
   <p>{{club.venue}}</p>
   <a href="/club">Go to Index</a>
 </div>
-{% endblock content %}
+ -->

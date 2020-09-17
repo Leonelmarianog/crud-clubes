@@ -1,7 +1,74 @@
 {% extends "views/layouts/base.html" %}
 
 {% block content %}
-  <div>
+<div class="text-center">
+  <a href="/club" class="btn btn-primary">Go to Index</a>
+</div>
+
+<form action="/club/save" method="POST" enctype="multipart/form-data">
+  {% if club.id %}
+  <input type="hidden" name="id" value="{{ club.id }}" readonly/>
+  {% endif %}
+
+  <div class="form-group">
+    <label for="name" class="font-weight-bold">Name</label>
+    <input type="text" class="form-control" name="name" value="{{ club.name }}" placeholder="{{ club.name }}">
+  </div>
+  <div class="form-group">
+    <label for="shortname" class="font-weight-bold">Short Name</label>
+    <input type="text" class="form-control" name="short-name" value="{{ club.shortName }}" placeholder="{{ club.shortName }}">
+  </div>
+  <div class="form-group">
+    <label for="tla" class="font-weight-bold">TLA</label>
+    <input type="text" class="form-control" name="tla" value="{{ club.tla }}" placeholder="{{ club.tla }}">
+  </div>
+  <div class="form-group">
+    <label for="crestUrl" class="font-weight-bold">Crest</label>
+    <input type="file" class="form-control-file border" name="crest-url">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="address" class="font-weight-bold">Address</label>
+    <input type="text" class="form-control" name="address" value="{{ club.address }}" placeholder="{{ club.address }}">
+  </div>
+  <div class="form-group">
+    <label for="phone" class="font-weight-bold">Phone</label>
+    <input type="text" class="form-control" name="phone" value="{{ club.phone }}" placeholder="{{ club.phone }}">
+  </div>
+  <div class="form-group">
+    <label for="website" class="font-weight-bold">Website</label>
+    <input type="text" class="form-control" name="website" value="{{ club.website }}" placeholder="{{ club.website }}">
+  </div>
+  <div class="form-group">
+    <label for="email" class="font-weight-bold">Email</label>
+    <input type="text" class="form-control" name="email" value="{{ club.email }}" placeholder="{{ club.email }}">
+  </div>
+  <div class="form-group">
+    <label for="founded" class="font-weight-bold">Founded</label>
+    <input type="text" class="form-control" name="founded" value="{{ club.founded }}" placeholder="{{ club.founded }}">
+  </div>
+  <div class="form-group">
+    <label for="club-colors" class="font-weight-bold">Club Colors</label>
+    <input type="text" class="form-control" name="club-colors" value="{{ club.clubColors }}" placeholder="{{ club.clubColors }}">
+  </div>
+  <div class="form-group">
+    <label for="venue" class="font-weight-bold">Venue</label>
+    <input type="text" class="form-control" name="venue" value="{{ club.venue }}" placeholder="{{ club.venue }}">
+  </div>
+
+  {% if club %}
+  <div class="text-center">
+    <button type="submit" class="btn btn-success">Update Club</button>
+  </div>
+  {% else %}
+  <div class="text-center">
+    <button type="submit" class="btn btn-success">Add Club</button>
+  </div>
+  {% endif %}
+</form>
+{% endblock content %}
+
+<!--   <div>
     <form action="/club/save" method="POST" enctype="multipart/form-data">
       {% if club.id %}
         <input type="hidden" name="id" value="{{club.id}}" readonly/>
@@ -69,5 +136,4 @@
       {% endif %}
     </form>
     <a href="/club">Go to Index</a>
-  </div>
-{% endblock content %}
+  </div> -->
