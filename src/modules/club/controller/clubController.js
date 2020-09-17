@@ -60,6 +60,10 @@ class ClubController extends AbstractClubController {
    */
   async save(req, res) {
     const clubData = { ...req.body };
+    if (req.file) {
+      const { path } = req.file;
+      clubData['crest-url'] = `\\${path}`;
+    }
     const club = fromDataToEntity(clubData);
     const savedClub = await this.clubService.save(club);
     res.redirect(`/club/view/${savedClub.id}`);
@@ -72,7 +76,7 @@ class ClubController extends AbstractClubController {
   async delete(req, res) {
     const { id: clubId } = req.params;
     await this.clubService.delete(clubId);
-    res.redirect('/');
+    res.redirect('/club');
   }
 
   /**
