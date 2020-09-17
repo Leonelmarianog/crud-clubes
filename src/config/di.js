@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
 const multer = require('multer');
+const session = require('express-session');
 const { default: DIContainer, object, get, factory } = require('rsdi');
 const { ClubController, ClubService, ClubRepository } = require('../modules/club/module');
 
@@ -31,6 +32,19 @@ function configureMulter() {
   return multer({ storage });
 }
 
+function configureSession() {
+  const ONE_WEEK_IN_SECONDS = 604800000;
+
+  const sessionOptions = {
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: ONE_WEEK_IN_SECONDS },
+  };
+
+  return session(sessionOptions);
+}
+
 /**
  * @param {DIContainer} container
  */
@@ -40,6 +54,7 @@ function addCommonDefinitions(container) {
     uuid: factory(configureUuid),
     JSONDatabase: factory(configureMainJSONDatabase),
     Multer: factory(configureMulter),
+    Session: factory(configureSession),
   });
 }
 

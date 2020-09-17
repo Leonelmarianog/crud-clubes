@@ -32,7 +32,10 @@ class ClubController extends AbstractClubController {
    */
   async index(req, res) {
     const clubes = await this.clubService.getAll();
-    res.render('club/views/index.html', { clubes });
+    const { message, error } = req.session;
+    res.render('club/views/index.html', { clubes, message, error });
+    req.session.message = null;
+    req.session.error = null;
   }
 
   /**
@@ -40,9 +43,14 @@ class ClubController extends AbstractClubController {
    * @param {import("express").Response} res
    */
   async update(req, res) {
-    const { id: clubId } = req.params;
-    const clubToUpdate = await this.clubService.getById(clubId);
-    res.render('club/views/form.html', { club: clubToUpdate });
+    try {
+      const { id: clubId } = req.params;
+      const clubToUpdate = await this.clubService.getById(clubId);
+      res.render('club/views/form.html', { club: clubToUpdate });
+    } catch (error) {
+      req.session.error = error.message;
+      res.redirect('/club');
+    }
   }
 
   /**
@@ -59,14 +67,23 @@ class ClubController extends AbstractClubController {
    * @param {import("express").Response} res
    */
   async save(req, res) {
-    const clubData = { ...req.body };
-    if (req.file) {
-      const { path } = req.file;
-      clubData['crest-url'] = `\\${path}`;
+    try {
+      const clubData = { ...req.body };
+      if (req.file) {
+        const { path } = req.file;
+        clubData['crest-url'] = `\\${path}`;
+      }
+      const club = fromDataToEntity(clubData);
+      const savedClub = await this.clubService.save(club);
+      if (club.id) {
+        req.session.message = `Club ${club.name} with id ${club.id} successfully updated`;
+      } else {
+        req.session.message = `Club ${savedClub.name} with id ${savedClub.id} successfully created`;
+      }
+    } catch (error) {
+      req.session.error = error.message;
     }
-    const club = fromDataToEntity(clubData);
-    const savedClub = await this.clubService.save(club);
-    res.redirect(`/club/view/${savedClub.id}`);
+    res.redirect('/club');
   }
 
   /**
@@ -74,8 +91,14 @@ class ClubController extends AbstractClubController {
    * @param {import("express").Response} res
    */
   async delete(req, res) {
-    const { id: clubId } = req.params;
-    await this.clubService.delete(clubId);
+    try {
+      const { id: clubId } = req.params;
+      const club = await this.clubService.getById(clubId);
+      await this.clubService.delete(clubId);
+      req.session.message = `Club ${club.name} with id ${club.id} successfully deleted`;
+    } catch (error) {
+      req.session.error = error.message;
+    }
     res.redirect('/club');
   }
 
@@ -84,9 +107,14 @@ class ClubController extends AbstractClubController {
    * @param {import("express").Response} res
    */
   async view(req, res) {
-    const clubId = req.params.id;
-    const club = await this.clubService.getById(clubId);
-    res.render('club/views/club.html', { club });
+    try {
+      const clubId = req.params.id;
+      const club = await this.clubService.getById(clubId);
+      res.render('club/views/club.html', { club });
+    } catch (error) {
+      req.session.error = error.message;
+      res.redirect('/club');
+    }
   }
 }
 

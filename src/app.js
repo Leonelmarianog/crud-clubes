@@ -8,15 +8,16 @@ const { init: initClubModule } = require('./modules/club/module');
 const app = express();
 const port = process.env.PORT || 3000;
 
+const container = configureDependencyInjection();
+
 app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static('public'));
+app.use(container.get('Session'));
 
 nunjucks.configure('src/modules', {
   autoescape: true,
   express: app,
 });
-
-const container = configureDependencyInjection();
 
 initClubModule(app, container);
 
