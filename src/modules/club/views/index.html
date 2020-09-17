@@ -14,7 +14,7 @@
         {{ club.name }}
       </a>
     </div>
-    <div class="col-4 col-sm-4 col-md-2 col-lg-2 my-auto">
+    <div class="col-4 col-sm-4 col-md-2 col-lg-2 my-auto text-center">
       <a href="/club/update/{{ club.id }}" class="btn btn-warning">
         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pen" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M5.707 13.707a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391L10.086 2.5a2 2 0 0 1 2.828 0l.586.586a2 2 0 0 1 0 2.828l-7.793 7.793zM3 11l7.793-7.793a1 1 0 0 1 1.414 0l.586.586a1 1 0 0 1 0 1.414L5 13l-3 1 1-3z"/>
@@ -33,20 +33,3 @@
   {% endfor %}
 </div>
 {% endblock content %}
-
-<!-- <div>
-  <table>
-    <tbody>
-      {% for club in clubes %}
-      <tr>
-        <td>{{ club.name }}</td>
-        <td><a href="/club/view/{{ club.id }}">View</a></td>
-        <td><a href="/club/update/{{ club.id }}">Edit</a></td>
-        <td><a href="/club/delete/{{ club.id }}">Delete</a></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <a href="club/create">Add new club</a>
-</div> -->
-

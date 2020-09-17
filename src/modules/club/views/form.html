@@ -1,7 +1,7 @@
 {% extends "views/layouts/base.html" %}
 
 {% block content %}
-<div class="text-center">
+<div class="text-center mb-4">
   <a href="/club" class="btn btn-primary">Go to Index</a>
 </div>
 
@@ -57,83 +57,13 @@
   </div>
 
   {% if club %}
-  <div class="text-center">
+  <div class="text-center mt-4">
     <button type="submit" class="btn btn-success">Update Club</button>
   </div>
   {% else %}
-  <div class="text-center">
+  <div class="text-center mt-4">
     <button type="submit" class="btn btn-success">Add Club</button>
   </div>
   {% endif %}
 </form>
 {% endblock content %}
-
-<!--   <div>
-    <form action="/club/save" method="POST" enctype="multipart/form-data">
-      {% if club.id %}
-        <input type="hidden" name="id" value="{{club.id}}" readonly/>
-      {% endif %}
-      
-      <div>
-        <label>Name:</label>
-        <input type=text name="name" value="{{club.name}}"/>
-      </div>
-      
-      <div>
-        <label>Short Name:</label>
-        <input type=text name="short-name" value="{{club.shortName}}"/>
-      </div>
-      
-      <div>
-        <label>TLA:</label>
-        <input type=text name="tla" value="{{club.tla}}"/>
-      </div>
-
-      <div>
-        <label>Crest:</label>
-        <input type="file" name="crest-url"/>
-      </div>
-
-      <div>
-        <label>Address:</label>
-        <input type=text name="address" value="{{club.address}}"/>
-      </div>
-
-      <div>
-        <label>Phone:</label>
-        <input type=text name="phone" value="{{club.phone}}"/>
-      </div>
-
-      <div>
-        <label>Website:</label>
-        <input type=text name="website" value="{{club.website}}"/>
-      </div>
-
-      <div>
-        <label>Email:</label>
-        <input type=text name="email" value="{{club.email}}"/>
-      </div>
-
-      <div>
-        <label>Founded:</label>
-        <input type=text name="founded" value="{{club.founded}}"/>
-      </div>
-
-      <div>
-        <label>Club Colors:</label>
-        <input type=text name="club-colors" value="{{club.clubColors}}"/>
-      </div>
-
-      <div>
-        <label>Venue:</label>
-        <input type=text name="venue" value="{{club.venue}}"/>
-      </div>
-      
-      {% if club %}
-        <button type="submit">Update Club</button>
-      {% else %}
-        <button type="submit">Create Club</button>
-      {% endif %}
-    </form>
-    <a href="/club">Go to Index</a>
-  </div> -->
