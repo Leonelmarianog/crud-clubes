@@ -75,7 +75,7 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * Gets a single clube from the database.
+   * Gets a single club from the database.
    * @param {String} id - The id of a club.
    * @returns {Promise<import("../../entity/club")>} - A promise that resolves to a club entity.
    */

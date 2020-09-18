@@ -15,23 +15,30 @@ class AbstractClubRepository {
   }
 
   /**
-   * @param {Object<import("../../entity/club")} club
-   * @returns {Object<import("../../entity/club")}
+   * Saves/Updates a club from the database.
+   * @param {import("../../entity/club")} club - A club entity.
+   * @returns {Promise<import("../../entity/club")>} - A promise that resolves to a club entity.
    */
   async save(club) {}
 
   /**
-   * @param {Number} id
+   * Deletes a club from the database.
+   * @param {String} id - The id of a club.
+   * @returns {Promise<Boolean>} - A promise that resolves to a boolean value, true if a club was successfully deleted, false if
+   * otherwise.
    */
   async delete(id) {}
 
   /**
-   * @param {Number} id
+   * Gets a single club from the database.
+   * @param {String} id - The id of a club.
+   * @returns {Promise<import("../../entity/club")>} - A promise that resolves to a club entity.
    */
   async getById(id) {}
 
   /**
-   * @returns {Array<import("../../entity/club")>}
+   * Gets all clubes from the database.
+   * @returns {Promise<Array<import("../../entity/club")>>} - A promise that resolves to an array of club entities.
    */
   async getAll() {}
 }
