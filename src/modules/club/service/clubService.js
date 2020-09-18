@@ -4,6 +4,7 @@ const ClubIdNotDefinedError = require('./error/clubIdNotDefinedError');
 
 class ClubService {
   /**
+   * clubService dependencies.
    * @param {import("../repository/json/abstractClubRepository")} clubRepository
    */
   constructor(clubRepository) {
@@ -11,6 +12,7 @@ class ClubService {
   }
 
   /**
+   * Calls clubRepository to save/update a club.
    * @param {import("../entity/club")} club - A club entity.
    * @returns {import("../entity/club")} - A club entity.
    */
@@ -21,6 +23,7 @@ class ClubService {
   }
 
   /**
+   * Calls clubRepository to delete a specific club.
    * @param {String} id - A club id.
    * @returns {Boolean} - A boolean value, true if a club was successfully deleted, false if otherwise.
    */
@@ -31,6 +34,7 @@ class ClubService {
   }
 
   /**
+   * Calls clubRepository to return a specific club.
    * @param {String} id - A club id.
    * @returns {import("../entity/club")} - A club entity.
    */
@@ -41,6 +45,7 @@ class ClubService {
   }
 
   /**
+   * Calls clubRepository to return all clubes.
    * @returns {Array<import("../entity/club")>} - An array of club entities.
    */
   async getAll() {

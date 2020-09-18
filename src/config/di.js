@@ -7,6 +7,7 @@ const { default: DIContainer, object, get, factory } = require('rsdi');
 const { ClubController, ClubService, ClubRepository } = require('../modules/club/module');
 
 /**
+ * For details of uuid, go to https://www.npmjs.com/package/uuid
  * @returns {Function} - A function which creates a random UUID when called.
  */
 function configureUuid() {
@@ -21,6 +22,7 @@ function configureMainJSONDatabase() {
 }
 
 /**
+ * Sets multer options. For details, go to https://www.npmjs.com/package/multer
  * @returns {import(multer)} - Middleware for handling multiform/form-data.
  */
 function configureMulter() {
@@ -36,13 +38,14 @@ function configureMulter() {
 }
 
 /**
+ * Sets session options. For details, go to https://www.npmjs.com/package/express-session
  * @returns {import("express-session")} - A Session middleware with options already set.
  */
 function configureSession() {
   const ONE_WEEK_IN_SECONDS = 604800000;
   const sessionOptions = {
-    secret: process.env.SESSION_SECRET,
-    resave: false,
+    secret: process.env.SESSION_SECRET, // Cookie encryption
+    resave: false, //
     saveUninitialized: false,
     cookie: { maxAge: ONE_WEEK_IN_SECONDS },
   };
@@ -74,6 +77,7 @@ function addClubModuleDefinitions(container) {
 }
 
 /**
+ * For details of RSDI, go to https://www.npmjs.com/package/rsdi
  * @returns {DIContainer} - A dependency Injection container with definitions set.
  */
 function configureDI() {

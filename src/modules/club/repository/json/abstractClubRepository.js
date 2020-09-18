@@ -4,6 +4,9 @@
 
 const AbstractClubRepositoryError = require('../error/abstractClubRepositoryError');
 
+/**
+ * Defines common functionality for a clubRepository.
+ */
 class AbstractClubRepository {
   constructor() {
     if (new.target === AbstractClubRepository) {

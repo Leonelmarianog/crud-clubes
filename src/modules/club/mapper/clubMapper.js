@@ -1,6 +1,7 @@
 const Club = require('../entity/club');
 
 /**
+ * Maps data to an entity.
  * @param {Object} - Data that comes from a form.
  * @returns {import("../entity/club")} - A club entity.
  */
