@@ -1,7 +1,7 @@
 {
   "name": "crud-clubes",
   "version": "1.0.0",
-  "description": "",
+  "description": "A CRUD (CREATE, RETRIEVE, UPDATE, DELETE) App of football teams.",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.js"
