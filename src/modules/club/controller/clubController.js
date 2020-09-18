@@ -108,7 +108,7 @@ class ClubController extends AbstractClubController {
    */
   async view(req, res) {
     try {
-      const clubId = req.params.id;
+      const { id: clubId } = req.params;
       const club = await this.clubService.getById(clubId);
       res.render('club/views/club.html', { club });
     } catch (error) {

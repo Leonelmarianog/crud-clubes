@@ -24,11 +24,13 @@ class ClubRepository extends AbstractClubRepository {
    * @returns {Promise<import("../../entity/club")}
    */
   async save(club) {
-    let clubToSave;
     const clubsData = this.getData();
+
+    let clubToSave;
 
     if (club.id) {
       const clubIndex = clubsData.findIndex((clubData) => clubData.id == club.id);
+
       if (clubIndex === -1) {
         throw new ClubNotFoundError(
           `Can't update club with id ${club.id} because it doesn't exist`
@@ -94,7 +96,7 @@ class ClubRepository extends AbstractClubRepository {
     let parsedContent;
     try {
       parsedContent = JSON.parse(content);
-    } catch (e) {
+    } catch (error) {
       parsedContent = [];
     }
     return parsedContent;

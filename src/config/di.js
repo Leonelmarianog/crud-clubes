@@ -34,14 +34,12 @@ function configureMulter() {
 
 function configureSession() {
   const ONE_WEEK_IN_SECONDS = 604800000;
-
   const sessionOptions = {
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: ONE_WEEK_IN_SECONDS },
   };
-
   return session(sessionOptions);
 }
 
