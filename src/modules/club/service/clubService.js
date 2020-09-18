@@ -11,8 +11,8 @@ class ClubService {
   }
 
   /**
-   * @param {import("../entity/club")} club
-   * @returns {import("../entity/club")}
+   * @param {import("../entity/club")} club - A club entity.
+   * @returns {import("../entity/club")} - A club entity.
    */
   async save(club) {
     if (!club) throw new ClubNotDefinedError('A club is required to save to the database');
@@ -21,8 +21,8 @@ class ClubService {
   }
 
   /**
-   * @param {Number} id
-   * @returns {Boolean}
+   * @param {String} id - A club id.
+   * @returns {Boolean} - A boolean value, true if a club was successfully deleted, false if otherwise.
    */
   async delete(id) {
     if (!id) throw new ClubIdNotDefinedError(`An id is required to delete a club`);
@@ -31,8 +31,8 @@ class ClubService {
   }
 
   /**
-   * @param {Number} id
-   * @returns {Object}
+   * @param {String} id - A club id.
+   * @returns {import("../entity/club")} - A club entity.
    */
   async getById(id) {
     if (!id) throw new ClubIdNotDefinedError('An id is required to get a club');
@@ -40,6 +40,9 @@ class ClubService {
     return club;
   }
 
+  /**
+   * @returns {Array<import("../entity/club")>} - An array of club entities.
+   */
   async getAll() {
     const clubes = this.clubRepository.getAll();
     return clubes;

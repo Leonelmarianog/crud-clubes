@@ -1,9 +1,8 @@
 const Club = require('../entity/club');
 
 /**
- *
- * @param {Object} formData
- * @returns {import("../entity/club")}
+ * @param {Object} - Data that comes from a form.
+ * @returns {import("../entity/club")} - A club entity.
  */
 function fromDataToEntity({
   id,

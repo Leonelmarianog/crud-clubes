@@ -20,8 +20,8 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * @param {import("../../entity/club")} club
-   * @returns {Promise<import("../../entity/club")}
+   * @param {import("../../entity/club")} club - A club entity.
+   * @returns {Promise<import("../../entity/club")>} - A promise that resolves to a club entity.
    */
   async save(club) {
     const clubsData = this.getData();
@@ -54,8 +54,9 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * @param {Number} id
-   * @returns {Boolean}
+   * @param {String} id - The id of a club.
+   * @returns {Promise<Boolean>} - A promise that resolves to a boolean value, true if a club was successfully deleted, false if
+   * otherwise.
    */
   async delete(id) {
     const clubsData = this.getData();
@@ -69,8 +70,8 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * @param {Number}
-   * @returns {Object}
+   * @param {String} id - The id of a club.
+   * @returns {Promise<import("../../entity/club")>} - A promise that resolves to a club entity.
    */
   async getById(id) {
     const clubsData = this.getData();
@@ -80,7 +81,7 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * @returns {Promise<Array<import("../../entity/club")>>}
+   * @returns {Promise<Array<import("../../entity/club")>>} - A promise that resolves to an array of club entities.
    */
   async getAll() {
     const clubsData = this.getData();
@@ -89,7 +90,7 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * @returns {Array}
+   * @returns {Array<JSON>} - An array of JSON data if the file was successfully parsed, otherwise, an empty array.
    */
   getData() {
     const content = this.fs.readFileSync(this.dbFilePath, { encoding: 'utf-8' });
@@ -103,7 +104,7 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * @param {Array<import('../../entity/club')} content
+   * @param {Array<import('../../entity/club')>} content - An array of club entities.
    */
   saveData(content) {
     this.fs.writeFileSync(this.dbFilePath, JSON.stringify(content));

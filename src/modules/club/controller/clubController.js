@@ -3,6 +3,7 @@ const fromDataToEntity = require('../mapper/clubMapper');
 
 class ClubController extends AbstractClubController {
   /**
+   * @param {import("multer")} uploadMiddleware - Middleware for handling multiform/form-data.
    * @param {import("../service/clubService")} clubService
    */
   constructor(uploadMiddleware, clubService) {

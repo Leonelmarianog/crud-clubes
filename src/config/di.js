@@ -7,19 +7,22 @@ const { default: DIContainer, object, get, factory } = require('rsdi');
 const { ClubController, ClubService, ClubRepository } = require('../modules/club/module');
 
 /**
- * @returns {Function}
+ * @returns {Function} - A function which creates a random UUID when called.
  */
 function configureUuid() {
   return uuid.v4;
 }
 
 /**
- * @returns {String}
+ * @returns {String} - The database file path.
  */
 function configureMainJSONDatabase() {
   return process.env.JSON_DB_PATH;
 }
 
+/**
+ * @returns {import(multer)} - Middleware for handling multiform/form-data.
+ */
 function configureMulter() {
   const storage = multer.diskStorage({
     destination(req, file, cb) {
@@ -32,6 +35,9 @@ function configureMulter() {
   return multer({ storage });
 }
 
+/**
+ * @returns {import("express-session")} - A Session middleware with options already set.
+ */
 function configureSession() {
   const ONE_WEEK_IN_SECONDS = 604800000;
   const sessionOptions = {
@@ -44,7 +50,7 @@ function configureSession() {
 }
 
 /**
- * @param {DIContainer} container
+ * @param {DIContainer} container - A dependency Injection container.
  */
 function addCommonDefinitions(container) {
   container.addDefinitions({
@@ -57,7 +63,7 @@ function addCommonDefinitions(container) {
 }
 
 /**
- * @param {DIContainer} container
+ * @param {DIContainer} container - A dependency Injection container.
  */
 function addClubModuleDefinitions(container) {
   container.addDefinitions({
@@ -68,7 +74,7 @@ function addClubModuleDefinitions(container) {
 }
 
 /**
- * @returns {Object}
+ * @returns {DIContainer} - A dependency Injection container with definitions set.
  */
 function configureDI() {
   const container = new DIContainer();
