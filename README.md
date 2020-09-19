@@ -4,9 +4,15 @@ A CRUD (CREATE, RETRIEVE, UPDATE, DELETE) app of football teams made for [R/Arge
 
 ## Software Architecture
 
+### Level 1
+
 <img src="./docs/crud-clubes-level-1-diagram.png">
 
+### Level 2
+
 <img src="./docs/crud-clubes-level-2-diagram.png">
+
+### Level 3
 
 <img src="./docs/crud-clubes-level-3-diagram.png">
 
