@@ -1,7 +1,7 @@
-const AbstractClubController = require('./abstractClubController');
+const AbstractController = require('../../abstractController');
 const fromDataToEntity = require('../mapper/clubMapper');
 
-class ClubController extends AbstractClubController {
+class ClubController extends AbstractController {
   /**
    * clubController dependencies.
    * @param {import("multer")} uploadMiddleware - Middleware for handling multiform/form-data.
