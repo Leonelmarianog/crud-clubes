@@ -1,18 +1,19 @@
 const AbstractController = require('../abstractController');
 const AbstractControllerError = require('../error/abstractControllerError');
 
-describe('AbstractController', () => {
-  it("Can't be instantiated directly", () => {
-    try {
-      // eslint-disable-next-line no-new
-      new AbstractController();
-    } catch (error) {
-      expect(error).toBeInstanceOf(AbstractControllerError);
-    }
-  });
+test("An abstract controller can't be instantiated", () => {
+  try {
+    // eslint-disable-next-line no-new
+    new AbstractController();
+  } catch (error) {
+    expect(error).toBeInstanceOf(AbstractControllerError);
+  }
+});
 
-  it('Is used as a base for a new instance of a controller', () => {
-    const ConcreteController = class extends AbstractController {};
-    expect(new ConcreteController()).toBeInstanceOf(AbstractController);
-  });
+test('A concrete controller that inherits from an abstract controller can be instantiated', () => {
+  const ConcreteController = class extends AbstractController {};
+  const controllerInstance = new ConcreteController();
+
+  expect(controllerInstance).toBeInstanceOf(AbstractController);
+  expect(controllerInstance).toBeInstanceOf(ConcreteController);
 });
