@@ -4,7 +4,9 @@
   "description": "A CRUD (CREATE, RETRIEVE, UPDATE, DELETE) App of football teams.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "test": "jest --coverage",
+    "test:dev": "jest --watch"
   },
   "author": "",
   "license": "ISC",
