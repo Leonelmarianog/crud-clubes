@@ -3,7 +3,7 @@
 const AbstractControllerError = require('./error/abstractControllerError');
 
 class AbstractController {
-  contructor() {
+  constructor() {
     if (new.target === AbstractController) {
       throw new AbstractControllerError("Can't instantiate an abstract class");
     }
