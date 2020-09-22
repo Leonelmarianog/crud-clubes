@@ -18,6 +18,15 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
+test('Sets routes', () => {
+  const app = {
+    get: jest.fn(),
+    post: jest.fn(),
+  };
+
+  clubController.configureRoutes(app);
+});
+
 test('Index method renders index.html', async () => {
   const reqMock = {
     session: {},
@@ -29,6 +38,7 @@ test('Index method renders index.html', async () => {
 
   await clubController.index(reqMock, resMock);
 
+  expect(clubServiceMock.getAll).toHaveBeenCalledTimes(1);
   expect(resMock.render).toHaveBeenCalledTimes(1);
   expect(resMock.render).toHaveBeenCalledWith('club/views/index.html', {
     clubes: [],
@@ -167,6 +177,50 @@ test('Delete method sets an error message into the session and redirects to /clu
   expect(resMock.redirect).toHaveBeenCalledWith('/club');
 });
 
+test('Save method creates a new club when there is no id available', async () => {
+  const bodyMock = {
+    name: undefined,
+    'short-name': undefined,
+    tla: undefined,
+    address: undefined,
+    phone: undefined,
+    website: undefined,
+    email: undefined,
+    founded: undefined,
+    'club-colors': undefined,
+    venue: undefined,
+  };
+  const reqMock = {
+    body: bodyMock,
+    file: { path: 'public/img/crests' },
+    session: { message: null },
+  };
+  const resMock = {
+    redirect: jest.fn(),
+  };
+  const club = new Club({
+    id: undefined,
+    name: undefined,
+    shortName: undefined,
+    tla: undefined,
+    crestUrl: `\\${reqMock.file.path}`,
+    address: undefined,
+    phone: undefined,
+    website: undefined,
+    email: undefined,
+    founded: undefined,
+    clubColors: undefined,
+    venue: undefined,
+  });
+
+  await clubController.save(reqMock, resMock);
+
+  expect(clubServiceMock.save).toHaveBeenCalledTimes(1);
+  expect(clubServiceMock.save).toHaveBeenCalledWith(club);
+  expect(resMock.redirect).toHaveBeenCalledTimes(1);
+  expect(resMock.redirect).toHaveBeenLastCalledWith('/club');
+});
+
 test('Save method updates a club when there is an id available', async () => {
   const bodyMock = {
     id: '1',
@@ -208,13 +262,13 @@ test('Save method updates a club when there is an id available', async () => {
 
   expect(clubServiceMock.save).toHaveBeenCalledTimes(1);
   expect(clubServiceMock.save).toHaveBeenCalledWith(club);
-  expect(reqMock.session.message).not.toBe(null);
   expect(resMock.redirect).toHaveBeenCalledTimes(1);
   expect(resMock.redirect).toHaveBeenLastCalledWith('/club');
 });
 
-/* test('Save method creates a new club when there is no id available', async () => {
+test("Save method doesn't modify the request body when an image was not uploaded", async () => {
   const bodyMock = {
+    id: '1',
     name: undefined,
     'short-name': undefined,
     tla: undefined,
@@ -228,18 +282,17 @@ test('Save method updates a club when there is an id available', async () => {
   };
   const reqMock = {
     body: bodyMock,
-    file: { path: 'public/img/crests' },
     session: { message: null },
   };
   const resMock = {
     redirect: jest.fn(),
   };
   const club = new Club({
-    id: undefined,
+    id: '1',
     name: undefined,
     shortName: undefined,
     tla: undefined,
-    crestUrl: `\\${reqMock.file.path}`,
+    crestUrl: undefined,
     address: undefined,
     phone: undefined,
     website: undefined,
@@ -253,8 +306,6 @@ test('Save method updates a club when there is an id available', async () => {
 
   expect(clubServiceMock.save).toHaveBeenCalledTimes(1);
   expect(clubServiceMock.save).toHaveBeenCalledWith(club);
-  expect(reqMock.session.message).not.toBe(null);
   expect(resMock.redirect).toHaveBeenCalledTimes(1);
   expect(resMock.redirect).toHaveBeenLastCalledWith('/club');
 });
- */
