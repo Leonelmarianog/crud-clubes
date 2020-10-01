@@ -1,8 +1,8 @@
-# crud-clubes (JSON Version)
+# crud-clubes (SQLite Version - WIP)
 
 A CRUD (CREATE, RETRIEVE, UPDATE, DELETE) app of football teams made for [R/Argentina-Programa](https://argentinaprograma.com/) programming course.
 
-For the SQLite version, check the branches! (WIP).
+For the JSON version, check the branches!.
 
 ## Software Architecture
 
