@@ -3,8 +3,7 @@ const fromDataToEntity = require('../mapper/clubMapper');
 
 class ClubController extends AbstractController {
   /**
-   * clubController dependencies.
-   * @param {import("multer")} uploadMiddleware - Middleware for handling multiform/form-data.
+   * @param {import("multer")} uploadMiddleware
    * @param {import("../service/clubService")} clubService
    */
   constructor(uploadMiddleware, clubService) {
@@ -15,7 +14,6 @@ class ClubController extends AbstractController {
   }
 
   /**
-   * Sets club related routes.
    * @param {import("express").Application} app
    */
   configureRoutes(app) {
@@ -30,7 +28,6 @@ class ClubController extends AbstractController {
   }
 
   /**
-   * Tells clubService to return all clubes and renders their information in the index/home page.
    * @param {import("express").Request} req
    * @param {import("express").Response} res
    */
@@ -43,8 +40,6 @@ class ClubController extends AbstractController {
   }
 
   /**
-   * Tells clubService to return a club and renders its information along with a form to be able to update said club. If the club
-   * doesn't exist, it redirects to the index/home page.
    * @param {import("express").Request} req
    * @param {import("express").Response} res
    */
@@ -60,7 +55,6 @@ class ClubController extends AbstractController {
   }
 
   /**
-   * Renders a form to create a club.
    * @param {import("express").Request} req
    * @param {import("express").Response} res
    */
@@ -70,7 +64,6 @@ class ClubController extends AbstractController {
   }
 
   /**
-   * Tells clubService to save/Update a club and redirects to the index/home page.
    * @param {import("express").Request} req
    * @param {import("express").Response} res
    */
@@ -95,7 +88,6 @@ class ClubController extends AbstractController {
   }
 
   /**
-   * Tells clubService to delete a specific club and redirects to the index/home page.
    * @param {import("express").Request} req
    * @param {import("express").Response} res
    */
@@ -112,7 +104,6 @@ class ClubController extends AbstractController {
   }
 
   /**
-   * Tells clubService to return a specific club and renders its information. If The club doesn't exist, it redirects to the index.
    * @param {import("express").Request} req
    * @param {import("express").Response} res
    */

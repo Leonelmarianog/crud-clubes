@@ -3,7 +3,6 @@ const ClubService = require('./service/clubService');
 const ClubRepository = require('./repository/json/clubRepository');
 
 /**
- * Initializes club module.
  * @param {import("express").Application} app
  * @param {import("rsdi").IDIContainer} container
  */

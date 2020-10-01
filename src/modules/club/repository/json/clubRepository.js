@@ -8,7 +8,6 @@ const ClubIdNotDefinedError = require('../error/clubIdNotDefinedError');
 
 class ClubRepository extends AbstractClubRepository {
   /**
-   * clubRepository dependencies.
    * @param {import("uuid")} uuid
    * @param {import("fs")} fs
    * @param {string} dbFilePath
@@ -21,16 +20,14 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * Saves/Updates a club from the database.
-   * @param {import("../../entity/club")} club - A club entity.
-   * @returns {Promise<import("../../entity/club")>} - A promise that resolves to a club entity.
+   * @param {import("../../entity/club")} club
+   * @returns {Promise<import("../../entity/club")>}
    */
   async save(club) {
     const clubsData = this.getData();
 
     let clubToSave;
 
-    // if club.id is truthy, then we are updating a club
     if (club.id) {
       const clubIndex = clubsData.findIndex((clubData) => clubData.id == club.id);
 
@@ -40,17 +37,16 @@ class ClubRepository extends AbstractClubRepository {
         );
       }
 
-      const oldClubData = clubsData[clubIndex]; // save a reference to the old club
-      clubsData[clubIndex] = club; // update clubsData[clubIndex] reference to point to the updated club
+      const oldClubData = clubsData[clubIndex];
+      clubsData[clubIndex] = club;
 
-      // Check if an image was uploaded. If it wasn't, use the old image the club had
       if (!club.crestUrl) {
         clubsData[clubIndex].crestUrl = oldClubData.crestUrl;
       }
 
       clubToSave = club;
     } else {
-      clubToSave = { ...club, id: this.uuid() }; // use uuid to create a new id for the new club
+      clubToSave = { ...club, id: this.uuid() };
       clubsData.push(clubToSave);
     }
     this.saveData(clubsData);
@@ -58,10 +54,8 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * Deletes a club from the database.
-   * @param {String} id - The id of a club.
-   * @returns {Promise<Boolean>} - A promise that resolves to a boolean value, true if a club was successfully deleted, false if
-   * otherwise.
+   * @param {String} id
+   * @returns {Promise<Boolean>}
    */
   async delete(id) {
     const clubsData = this.getData();
@@ -75,9 +69,8 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * Gets a single club from the database.
-   * @param {String} id - The id of a club.
-   * @returns {Promise<import("../../entity/club")>} - A promise that resolves to a club entity.
+   * @param {String} id
+   * @returns {Promise<import("../../entity/club")>}
    */
   async getById(id) {
     const clubsData = this.getData();
@@ -87,8 +80,7 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * Gets all clubes from the database.
-   * @returns {Promise<Array<import("../../entity/club")>>} - A promise that resolves to an array of club entities.
+   * @returns {Promise<Array<import("../../entity/club")>>}
    */
   async getAll() {
     const clubsData = this.getData();
@@ -97,8 +89,7 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * Parses database data.
-   * @returns {Array<JSON>} - An array of JSON data if the file was successfully parsed, otherwise, an empty array.
+   * @returns {Array<JSON>}
    */
   getData() {
     const content = this.fs.readFileSync(this.dbFilePath, { encoding: 'utf-8' });
@@ -112,8 +103,7 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * Writes to the database.
-   * @param {Array<import('../../entity/club')>} content - An array of club entities.
+   * @param {Array<import('../../entity/club')>} content
    */
   saveData(content) {
     this.fs.writeFileSync(this.dbFilePath, JSON.stringify(content));
