@@ -75,7 +75,9 @@ class ClubRepository extends AbstractClubRepository {
   async getById(id) {
     const clubsData = this.getData();
     const club = clubsData.find((clubData) => clubData.id == id);
-    if (!club) throw new ClubNotFoundError(`Can't find club with id ${id}`);
+    if (!club) {
+      throw new ClubNotFoundError(`Can't find club with id ${id}`);
+    }
     return new Club(club);
   }
 

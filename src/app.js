@@ -8,7 +8,6 @@ const { init: initClubModule } = require('./modules/club/module');
 
 const app = express();
 const port = process.env.PORT || 3000;
-
 const container = configureDependencyInjection();
 
 setBodyParser(app);

@@ -15,7 +15,9 @@ class ClubService {
    * @returns {import("../entity/club")}
    */
   async save(club) {
-    if (!club) throw new ClubNotDefinedError('A club is required to save to the database');
+    if (!club) {
+      throw new ClubNotDefinedError('A club is required to save to the database');
+    }
     const savedClub = this.clubRepository.save(club);
     return savedClub;
   }
@@ -25,7 +27,9 @@ class ClubService {
    * @returns {Boolean}
    */
   async delete(id) {
-    if (!id) throw new ClubIdNotDefinedError(`An id is required to delete a club`);
+    if (!id) {
+      throw new ClubIdNotDefinedError(`An id is required to delete a club`);
+    }
     const isDeleted = this.clubRepository.delete(id);
     return isDeleted;
   }
@@ -35,7 +39,9 @@ class ClubService {
    * @returns {import("../entity/club")}
    */
   async getById(id) {
-    if (!id) throw new ClubIdNotDefinedError('An id is required to get a club');
+    if (!id) {
+      throw new ClubIdNotDefinedError('An id is required to get a club');
+    }
     const club = this.clubRepository.getById(id);
     return club;
   }
