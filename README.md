@@ -1,6 +1,8 @@
-# crud-clubes (WIP)
+# crud-clubes (JSON Version)
 
 A CRUD (CREATE, RETRIEVE, UPDATE, DELETE) app of football teams made for [R/Argentina-Programa](https://argentinaprograma.com/) programming course.
+
+For the SQLite version, check the branches! (WIP).
 
 ## Software Architecture
 
@@ -22,7 +24,7 @@ A CRUD (CREATE, RETRIEVE, UPDATE, DELETE) app of football teams made for [R/Arge
 
 2 - Copy `.env.dist` and paste it in the root of this project, then rename it to `.env `.
 
-NOTE: Your IDE/Text editor should support Prettier + ESLint, for example, VSCODE.
+NOTE: Your IDE/Text editor should support Prettier + ESLint, for example, VSCODE. [Setup Guide for VSCODE](https://blog.echobind.com/integrating-prettier-eslint-airbnb-style-guide-in-vscode-47f07b5d7d6a)
 
 ## Running
 
