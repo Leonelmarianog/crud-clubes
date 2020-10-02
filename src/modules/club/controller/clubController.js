@@ -1,5 +1,5 @@
 const AbstractController = require('../../abstractController');
-const fromDataToEntity = require('../mapper/clubMapper');
+const { fromDataToEntity } = require('../mapper/clubMapper');
 
 class ClubController extends AbstractController {
   /**

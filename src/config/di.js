@@ -1,25 +1,19 @@
-const fs = require('fs');
 const path = require('path');
-const uuid = require('uuid');
 const multer = require('multer');
 const session = require('express-session');
 const nunjucks = require('nunjucks');
+const Sqlite3Database = require('better-sqlite3');
 const { default: DIContainer, object, get, factory } = require('rsdi');
 const { ClubController, ClubService, ClubRepository } = require('../modules/club/module');
 
 /**
- * https://www.npmjs.com/package/uuid
- * @returns {Function}
+ * https://www.npmjs.com/package/better-sqlite3
+ * @returns {import("better-sqlite3")}
  */
-function configureUuid() {
-  return uuid.v4;
-}
-
-/**
- * @returns {String}
- */
-function configureMainJSONDatabase() {
-  return process.env.JSON_DB_PATH;
+function configureMainDatabaseAdapter() {
+  return new Sqlite3Database(process.env.DB_PATH, {
+    verbose: console.log,
+  });
 }
 
 /**
@@ -72,9 +66,7 @@ function setNunjucksOptions() {
  */
 function addCommonDefinitions(container) {
   container.addDefinitions({
-    fs,
-    uuid: factory(configureUuid),
-    JSONDatabase: factory(configureMainJSONDatabase),
+    MainDatabaseAdapter: factory(configureMainDatabaseAdapter),
     Multer: factory(configureMulter),
     Session: factory(configureSession),
   });
@@ -99,7 +91,7 @@ function addClubModuleDefinitions(container) {
   container.addDefinitions({
     ClubController: object(ClubController).construct(get('Multer'), get('ClubService')),
     ClubService: object(ClubService).construct(get('ClubRepository')),
-    ClubRepository: object(ClubRepository).construct(get('uuid'), get('fs'), get('JSONDatabase')),
+    ClubRepository: object(ClubRepository).construct(get('MainDatabaseAdapter')),
   });
 }
 
