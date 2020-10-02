@@ -15,9 +15,7 @@ describe('Dependency Injection Container', () => {
   });
 
   it('Contains common definitions', () => {
-    expect(container.get('fs')).toBeDefined();
-    expect(container.get('uuid')).toBeDefined();
-    expect(container.get('JSONDatabase')).toBeDefined();
+    expect(container.get('MainDatabaseAdapter')).toBeDefined();
     expect(container.get('Multer')).toBeDefined();
     expect(container.get('Session')).toBeDefined();
   });
