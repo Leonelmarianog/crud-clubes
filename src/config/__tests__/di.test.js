@@ -1,12 +1,6 @@
 const { default: DIContainer } = require('rsdi');
 const configureDI = require('../di');
 
-// JSONDatabase needs the JSON_DB_PATH environment variable so I need to set it before the test.
-// CRESTS_UPLOAD_DIR and SESSION_SECRET are not necessary in these tests, but I put them anyways.
-process.env.JSON_DB_PATH = '/some/path';
-process.env.CRESTS_UPLOAD_DIR = '/some/path';
-process.env.SESSION_SECRET = 'Secret Testing';
-
 describe('Dependency Injection Container', () => {
   const container = configureDI();
 
