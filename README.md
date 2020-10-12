@@ -1,8 +1,10 @@
-# crud-clubes (SQLite Version - WIP)
+# crud-clubes (SQLite Version)
 
 A CRUD (CREATE, RETRIEVE, UPDATE, DELETE) app of football teams made for [R/Argentina-Programa](https://argentinaprograma.com/) programming course.
 
-For the JSON version, check the branches!.
+JSON version: [Click me](https://github.com/Leonelmarianog/crud-clubes/tree/master)
+
+ORM version: [Click me](https://github.com/Leonelmarianog/crud-clubes/tree/orm-version)
 
 ## Software Architecture
 
@@ -40,6 +42,8 @@ Adapted from https://softwareontheroad.com/ideal-nodejs-project-structure/
 
 | Route                               | Description                                                                                    |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------- |
+| data                                | Contains SQL database                                                                          |
+| data/database.db                    | Main database                                                                                  |
 | public                              | Contains static files served by the browser. This is where uploaded images are stored.         |
 | src                                 | Contains the app.                                                                              |
 | src/app.js                          | Entry point of the app.                                                                        |
