@@ -1,8 +1,10 @@
-# crud-clubes (SQLite Version - WIP)
+# crud-clubes (ORM Version - WIP)
 
 A CRUD (CREATE, RETRIEVE, UPDATE, DELETE) app of football teams made for [R/Argentina-Programa](https://argentinaprograma.com/) programming course.
 
-For the JSON version, check the branches!.
+JSON version: [Click here](https://github.com/Leonelmarianog/crud-clubes/tree/master)
+
+SQLite only version: [Click here](https://github.com/Leonelmarianog/crud-clubes/tree/sqlite-version)
 
 ## Software Architecture
 
@@ -29,6 +31,7 @@ NOTE: Your IDE/Text editor should support Prettier + ESLint, for example, VSCODE
 ## Running
 
 ```
+npm run schema:sync # Synchronize main database with defined models.
 npm run dev # Runs project in development mode.
 npm run test # Runs jest tests and collects code coverage.
 npm run test:dev # Runs jest in watch mode.
@@ -40,6 +43,8 @@ Adapted from https://softwareontheroad.com/ideal-nodejs-project-structure/
 
 | Route                               | Description                                                                                    |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------- |
+| data                                | Contains SQL database                                                                          |
+| data/database.db                    | Main database                                                                                  |
 | public                              | Contains static files served by the browser. This is where uploaded images are stored.         |
 | src                                 | Contains the app.                                                                              |
 | src/app.js                          | Entry point of the app.                                                                        |
@@ -54,6 +59,7 @@ Adapted from https://softwareontheroad.com/ideal-nodejs-project-structure/
 | src/modules/club/controller         | Entry point of the controller, handles HTTP requests.                                          |
 | src/modules/club/entity             | Club entity of the domain.                                                                     |
 | src/modules/club/mapper             | Maps form data into a Club entity.                                                             |
+| src/modules/club/model              | Club model                                                                                     |
 | src/modules/club/repository         | Interacts with the Data Access Layer and returns entities.                                     |
 | src/modules/club/service            | Contains the Business Logic of the app.                                                        |
 | src/modules/club/views              | Presentation files (Interface) that are processed server-side (Server-Side-Rendering).         |
