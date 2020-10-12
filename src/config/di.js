@@ -2,23 +2,37 @@ const path = require('path');
 const multer = require('multer');
 const session = require('express-session');
 const nunjucks = require('nunjucks');
-const Sqlite3Database = require('better-sqlite3');
+const { Sequelize } = require('sequelize');
 const { default: DIContainer, object, get, factory } = require('rsdi');
-const { ClubController, ClubService, ClubRepository } = require('../modules/club/module');
+const {
+  ClubController,
+  ClubService,
+  ClubRepository,
+  ClubModel,
+} = require('../modules/club/module');
 
 /**
- * https://www.npmjs.com/package/better-sqlite3
- * @returns {import("better-sqlite3")}
+ * https://sequelize.org/master/manual/getting-started.html
+ * @returns {Sequelize} - Database connection
  */
-function configureMainDatabaseAdapter() {
-  return new Sqlite3Database(process.env.DB_PATH, {
-    verbose: console.log,
+function configureMainSequelizeDatabase() {
+  return new Sequelize({
+    dialect: 'sqlite',
+    storage: process.env.DB_PATH,
   });
 }
 
 /**
+ * @returns {Function}
+ */
+function configureClubModel(container) {
+  const sequelize = container.get('Sequelize');
+  return ClubModel.setup(sequelize);
+}
+
+/**
  * https://www.npmjs.com/package/multer
- * @returns {import(multer)}
+ * @returns {import('multer')}
  */
 function configureMulter() {
   const storage = multer.diskStorage({
@@ -66,7 +80,7 @@ function setNunjucksOptions() {
  */
 function addCommonDefinitions(container) {
   container.addDefinitions({
-    MainDatabaseAdapter: factory(configureMainDatabaseAdapter),
+    Sequelize: factory(configureMainSequelizeDatabase),
     Multer: factory(configureMulter),
     Session: factory(configureSession),
   });
@@ -91,7 +105,8 @@ function addClubModuleDefinitions(container) {
   container.addDefinitions({
     ClubController: object(ClubController).construct(get('Multer'), get('ClubService')),
     ClubService: object(ClubService).construct(get('ClubRepository')),
-    ClubRepository: object(ClubRepository).construct(get('MainDatabaseAdapter')),
+    ClubRepository: object(ClubRepository).construct(get('ClubModel')),
+    ClubModel: factory(configureClubModel),
   });
 }
 

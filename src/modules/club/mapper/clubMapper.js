@@ -35,40 +35,14 @@ function fromDataToEntity({
 }
 
 /**
- * @param {Object} - Data that comes from a database
+ * @param {Object} - Model instance data
  * @returns {import('../entity/club')}
  */
-function fromDbToEntity({
-  id,
-  name,
-  short_name: shortName,
-  tla,
-  crest_url: crestUrl,
-  address,
-  phone,
-  website,
-  email,
-  founded,
-  club_colors: clubColors,
-  venue,
-}) {
-  return new Club({
-    id,
-    name,
-    shortName,
-    tla,
-    crestUrl,
-    address,
-    phone,
-    website,
-    email,
-    founded,
-    clubColors,
-    venue,
-  });
+function fromModelToEntity(modelInstance) {
+  return new Club(modelInstance.toJSON());
 }
 
 module.exports = {
   fromDataToEntity,
-  fromDbToEntity,
+  fromModelToEntity,
 };

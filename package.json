@@ -4,6 +4,7 @@
   "description": "A CRUD (CREATE, RETRIEVE, UPDATE, DELETE) App of football teams.",
   "main": "index.js",
   "scripts": {
+    "schema:sync": "node src/cli/init.db.js",
     "dev": "nodemon src/app.js",
     "test": "jest --coverage",
     "test:dev": "jest --watch"
@@ -11,13 +12,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "better-sqlite3": "^7.1.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "multer": "^1.4.2",
     "nunjucks": "^3.2.2",
-    "rsdi": "^1.0.5"
+    "rsdi": "^1.0.5",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.13",
