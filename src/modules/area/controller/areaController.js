@@ -30,7 +30,10 @@ class AreaController extends AbstractController {
    */
   async index(req, res) {
     const areas = await this.areaService.getAll();
-    res.render('area/views/index.html', { areas });
+    const { message, error } = req.session;
+    res.render('area/views/index.html', { areas, message, error });
+    req.session.message = null;
+    req.session.error = null;
   }
 
   /**
@@ -47,9 +50,18 @@ class AreaController extends AbstractController {
    * @param {import('express').Response} res
    */
   async save(req, res) {
-    const { body: areaData } = req;
-    const area = fromDataToEntity(areaData);
-    await this.areaService.save(area);
+    try {
+      const { body: areaData } = req;
+      const area = fromDataToEntity(areaData);
+      const savedArea = await this.areaService.save(area);
+      if (area.id) {
+        req.session.message = `Area ${area.name} with id ${area.id} successfully updated`;
+      } else {
+        req.session.message = `Area ${savedArea.name} with id ${savedArea.id} successfully created`;
+      }
+    } catch (error) {
+      req.session.error = error.message;
+    }
     res.redirect('/area');
   }
 
@@ -58,9 +70,14 @@ class AreaController extends AbstractController {
    * @param {import('express').Response} res
    */
   async update(req, res) {
-    const { areaId } = req.params;
-    const area = await this.areaService.getById(areaId);
-    res.render('area/views/form.html', { area });
+    try {
+      const { areaId } = req.params;
+      const area = await this.areaService.getById(areaId);
+      res.render('area/views/form.html', { area });
+    } catch (error) {
+      req.session.error = error.message;
+      res.redirect('/area');
+    }
   }
 
   /**
@@ -68,8 +85,14 @@ class AreaController extends AbstractController {
    * @param {import('express').Response} res
    */
   async delete(req, res) {
-    const { areaId } = req.params;
-    await this.areaService.delete(areaId);
+    try {
+      const { areaId } = req.params;
+      const area = await this.areaService.getById(areaId);
+      await this.areaService.delete(areaId);
+      req.session.message = `Area ${area.name} with id ${area.id} sucessfully deleted`;
+    } catch (error) {
+      req.session.error = error.message;
+    }
     res.redirect('/area');
   }
 }
