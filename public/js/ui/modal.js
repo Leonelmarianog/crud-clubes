@@ -1,10 +1,11 @@
 // https://getbootstrap.com/docs/4.0/components/modal/#varying-modal-content
 $('#modalCenter').on('show.bs.modal', (event) => {
   const $button = $(event.relatedTarget);
-  const clubId = $button.data('id');
-  const clubName = $button.data('name');
+  const id = $button.data('id');
+  const name = $button.data('name');
+  const domain = $button.data('domain');
   const $modal = $(event.currentTarget);
 
-  $modal.find('[name="clubName"]').text(clubName);
-  $modal.find('a').attr('href', `/club/delete/${clubId}`);
+  $modal.find('strong').text(name);
+  $modal.find('a').attr('href', `/${domain}/delete/${id}`);
 });

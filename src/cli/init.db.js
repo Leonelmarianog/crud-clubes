@@ -13,6 +13,11 @@ const mainDb = container.get('Sequelize');
  */
 const ClubModel = container.get('ClubModel');
 
+/**
+ * @type {Class} - Area Model
+ */
+const AreaModel = container.get('AreaModel');
+
 function populateClubesTable() {
   return ClubModel.bulkCreate([
     {
@@ -44,8 +49,13 @@ function populateClubesTable() {
   ]);
 }
 
+async function populateAreasTable() {
+  return AreaModel.bulkCreate([{ name: 'England' }, { name: 'Argentina' }]);
+}
+
 (async () => {
   await mainDb.sync({ force: true });
 
   await populateClubesTable();
+  await populateAreasTable();
 })();

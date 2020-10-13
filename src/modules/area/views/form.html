@@ -1,0 +1,28 @@
+{% extends "views/layouts/base.html" %}
+
+{% block content %}
+<div class="text-center mb-4">
+  <a href="/area" class="btn btn-primary">Go to Index</a>
+</div>
+
+<form action="/area/save" method="POST">
+  {% if area.id %}
+  <input type="hidden" name="id" value="{{ area.id }}" readonly/>
+  {% endif %}
+
+  <div class="form-group">
+    <label for="name" class="font-weight-bold">Name</label>
+    <input type="text" class="form-control" name="name" value="{{ area.name }}" placeholder="{{ area.name }}" required>
+  </div>
+
+  {% if area %}
+  <div class="text-center mt-4">
+    <button type="submit" class="btn btn-success">Update Area</button>
+  </div>
+  {% else %}
+  <div class="text-center mt-4">
+    <button type="submit" class="btn btn-success">Add Area</button>
+  </div>
+  {% endif %}
+</form>
+{% endblock content %}

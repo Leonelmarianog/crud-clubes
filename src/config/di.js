@@ -10,6 +10,12 @@ const {
   ClubRepository,
   ClubModel,
 } = require('../modules/club/module');
+const {
+  AreaController,
+  AreaService,
+  AreaRepository,
+  AreaModel,
+} = require('../modules/area/module');
 
 /**
  * https://sequelize.org/master/manual/getting-started.html
@@ -23,11 +29,21 @@ function configureMainSequelizeDatabase() {
 }
 
 /**
- * @returns {Function}
+ * @param {DIContainer} container
+ * @returns {import('../modules/area/model/areaModel')} - Club model
  */
 function configureClubModel(container) {
   const sequelize = container.get('Sequelize');
   return ClubModel.setup(sequelize);
+}
+
+/**
+ * @param {DIContainer} container
+ * @returns {import('../modules/area/model/areaModel')} - Area model
+ */
+function configureAreaModel(container) {
+  const sequelize = container.get('Sequelize');
+  return AreaModel.setup(sequelize);
 }
 
 /**
@@ -111,6 +127,18 @@ function addClubModuleDefinitions(container) {
 }
 
 /**
+ * @param {import('rsdi').default} container
+ */
+function addAreaModuleDefinitions(container) {
+  container.addDefinitions({
+    AreaController: object(AreaController).construct(get('AreaService')),
+    AreaService: object(AreaService).construct(get('AreaRepository')),
+    AreaRepository: object(AreaRepository).construct(get('AreaModel')),
+    AreaModel: factory(configureAreaModel),
+  });
+}
+
+/**
  * https://www.npmjs.com/package/rsdi
  * @returns {DIContainer}
  */
@@ -119,6 +147,7 @@ function configureDI() {
   addCommonDefinitions(container);
   addNunjucksDefinitions(container);
   addClubModuleDefinitions(container);
+  addAreaModuleDefinitions(container);
   return container;
 }
 
