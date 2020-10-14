@@ -14,13 +14,16 @@
         <li class="list-group-item"><strong>Name: </strong>{{ club.name }}</li>
         <li class="list-group-item"><strong>Short Name: </strong>{{ club.shortName }}</li>
         <li class="list-group-item"><strong>TLA: </strong>{{ club.tla }}</li>
+        <li class="list-group-item"><strong>Name: </strong>{{ club.area.name }}</li>
         <li class="list-group-item"><strong>Address: </strong>{{ club.address }}</li>
-        <li class="list-group-item"><strong>Phone: </strong>{{ club.phone if club.phone else 'Empty' }}</li>
+        <li class="list-group-item"><strong>Phone: </strong>{{ club.phone }}</li>
         <li class="list-group-item"><strong>Website: </strong><a href="{{ club.website }}">{{ club.website }}</a></li>
-        <li class="list-group-item"><strong>Email: </strong>{{ club.email if club.email else 'Empty'}}</li>
-        <li class="list-group-item"><strong>Founded: </strong>{{ club.founded if club.founded else 'Empty' }}</li>
+        <li class="list-group-item"><strong>Email: </strong>{{ club.email }}</li>
+        <li class="list-group-item"><strong>Founded: </strong>{{ club.founded }}</li>
         <li class="list-group-item"><strong>Club Colors: </strong>{{ club.clubColors }}</li>
         <li class="list-group-item"><strong>Venue: </strong>{{ club.venue }}</li>
+        <li class="list-group-item"><strong>Created at: </strong>{{ club.createdAt }}</li>
+        <li class="list-group-item"><strong>Last updated: </strong>{{ club.lastUpdated }}</li>
     </ul>
   </div>
 </div>

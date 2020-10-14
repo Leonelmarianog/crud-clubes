@@ -18,8 +18,8 @@ const ClubModel = container.get('ClubModel');
  */
 const AreaModel = container.get('AreaModel');
 
-function populateClubesTable() {
-  return ClubModel.bulkCreate([
+async function populateTables() {
+  await ClubModel.create(
     {
       name: 'Arsenal FC',
       shortName: 'Arsenal',
@@ -32,30 +32,31 @@ function populateClubesTable() {
       founded: 1886,
       clubColors: 'Red / White',
       venue: 'Emirates Stadium',
+      area: [{ name: 'England' }],
     },
     {
-      name: 'Everton FC',
-      shortName: 'Everton',
-      tla: 'EVE',
-      crestUrl: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg',
-      address: 'Goodison Park Liverpool L4 4EL',
-      phone: '+44 (0871) 6631878',
-      website: 'http://www.evertonfc.com',
-      email: 'everton@evertonfc.com',
-      founded: 1878,
-      clubColors: 'Blue / White',
-      venue: 'Goodison Park',
-    },
-  ]);
-}
+      include: { model: AreaModel, as: 'area' },
+    }
+  );
 
-async function populateAreasTable() {
-  return AreaModel.bulkCreate([{ name: 'England' }, { name: 'Argentina' }]);
+  await ClubModel.create({
+    name: 'Everton FC',
+    shortName: 'Everton',
+    tla: 'EVE',
+    crestUrl: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg',
+    address: 'Goodison Park Liverpool L4 4EL',
+    phone: '+44 (0871) 6631878',
+    website: 'http://www.evertonfc.com',
+    email: 'everton@evertonfc.com',
+    founded: 1878,
+    clubColors: 'Blue / White',
+    venue: 'Goodison Park',
+    fk_area_id: 1,
+  });
 }
 
 (async () => {
   await mainDb.sync({ force: true });
 
-  await populateClubesTable();
-  await populateAreasTable();
+  await populateTables();
 })();

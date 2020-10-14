@@ -33,8 +33,9 @@ function configureMainSequelizeDatabase() {
  * @returns {import('../modules/area/model/areaModel')} - Club model
  */
 function configureClubModel(container) {
-  const sequelize = container.get('Sequelize');
-  return ClubModel.setup(sequelize);
+  ClubModel.setup(container.get('Sequelize'));
+  ClubModel.setAssociations(container.get('AreaModel'));
+  return ClubModel;
 }
 
 /**
@@ -119,9 +120,13 @@ function addNunjucksDefinitions(container) {
  */
 function addClubModuleDefinitions(container) {
   container.addDefinitions({
-    ClubController: object(ClubController).construct(get('Multer'), get('ClubService')),
+    ClubController: object(ClubController).construct(
+      get('Multer'),
+      get('ClubService'),
+      get('AreaService')
+    ),
     ClubService: object(ClubService).construct(get('ClubRepository')),
-    ClubRepository: object(ClubRepository).construct(get('ClubModel')),
+    ClubRepository: object(ClubRepository).construct(get('ClubModel'), get('AreaModel')),
     ClubModel: factory(configureClubModel),
   });
 }

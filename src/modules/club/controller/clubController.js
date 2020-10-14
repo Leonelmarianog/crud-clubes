@@ -5,12 +5,14 @@ class ClubController extends AbstractController {
   /**
    * @param {import("multer")} uploadMiddleware
    * @param {import("../service/clubService")} clubService
+   * @param {import("../../area/service/areaService")} areaService
    */
-  constructor(uploadMiddleware, clubService) {
+  constructor(uploadMiddleware, clubService, areaService) {
     super();
     this.ROUTE_BASE = '/club';
     this.uploadMiddleware = uploadMiddleware;
     this.clubService = clubService;
+    this.areaService = areaService;
   }
 
   /**
@@ -47,7 +49,8 @@ class ClubController extends AbstractController {
     try {
       const { id: clubId } = req.params;
       const clubToUpdate = await this.clubService.getById(clubId);
-      res.render('club/views/form.html', { club: clubToUpdate });
+      const areas = await this.areaService.getAll();
+      res.render('club/views/form.html', { club: clubToUpdate, areas });
     } catch (error) {
       req.session.error = error.message;
       res.redirect('/club');
@@ -59,8 +62,9 @@ class ClubController extends AbstractController {
    * @param {import("express").Response} res
    */
   // eslint-disable-next-line class-methods-use-this
-  create(req, res) {
-    res.render('club/views/form.html');
+  async create(req, res) {
+    const areas = await this.areaService.getAll();
+    res.render('club/views/form.html', { areas });
   }
 
   /**

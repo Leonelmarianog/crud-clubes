@@ -10,10 +10,12 @@ const ClubNotFoundError = require('../error/clubNotFoundError');
 class ClubRepository extends AbstractClubRepository {
   /**
    * @param {import('../../model/ClubModel')} ClubModel
+   * @param {import('../../../area/model/areaModel')} AreaModel
    */
-  constructor(ClubModel) {
+  constructor(ClubModel, AreaModel) {
     super();
     this.ClubModel = ClubModel;
+    this.AreaModel = AreaModel;
   }
 
   /**
@@ -36,6 +38,7 @@ class ClubRepository extends AbstractClubRepository {
         founded: club.founded,
         clubColors: club.clubColors,
         venue: club.venue,
+        fk_area_id: club.fkAreaId,
       };
 
       if (club.crestUrl) {
@@ -68,6 +71,7 @@ class ClubRepository extends AbstractClubRepository {
         founded: club.founded,
         clubColors: club.clubColors,
         venue: club.venue,
+        fk_area_id: club.fkAreaId,
       });
 
       clubId = clubData.id;
@@ -93,7 +97,9 @@ class ClubRepository extends AbstractClubRepository {
    * @returns {Promise<import("../../entity/club")>}
    */
   async getById(id) {
-    const clubData = await this.ClubModel.findByPk(id);
+    const clubData = await this.ClubModel.findByPk(id, {
+      include: { model: this.AreaModel, as: 'area' },
+    });
     if (!clubData) {
       throw new ClubNotFoundError(`Can't find club with id ${id}`);
     }

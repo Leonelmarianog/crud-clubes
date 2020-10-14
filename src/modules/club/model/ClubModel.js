@@ -68,6 +68,16 @@ class ClubModel extends Model {
 
     return ClubModel;
   }
+
+  /**
+   * @param {import('../../area/model/areaModel')} AreaModel
+   */
+  static setAssociations(AreaModel) {
+    ClubModel.belongsTo(AreaModel, {
+      foreignKey: 'fk_area_id',
+      as: 'area',
+    });
+  }
 }
 
 module.exports = ClubModel;

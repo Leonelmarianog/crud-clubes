@@ -17,6 +17,8 @@ function fromDataToEntity({
   founded,
   'club-colors': clubColors,
   venue,
+  // eslint-disable-next-line camelcase
+  'fk-area-id': fk_area_id,
 }) {
   return new Club({
     id,
@@ -31,6 +33,7 @@ function fromDataToEntity({
     founded,
     clubColors,
     venue,
+    fk_area_id,
   });
 }
 

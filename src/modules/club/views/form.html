@@ -23,6 +23,15 @@
     <input type="text" class="form-control" name="tla" value="{{ club.tla }}" placeholder="{{ club.tla }}" required>
   </div>
   <div class="form-group">
+    <label for="area" class="font-weight-bold">Area</label>
+    <select class="form-control" id="area" name="fk-area-id" required>
+      {% for area in areas %}
+      <option value="" {{ "selected" if club.id }}>Choose an area</option>
+      <option value="{{ area.id }}" {{"selected" if club.area.id === area.id }}>{{ area.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
     <label for="crestUrl" class="font-weight-bold">Crest</label>
     <input type="file" class="form-control-file border" name="crest-url" accept="image/x-png,image/jpeg">
   </div>
