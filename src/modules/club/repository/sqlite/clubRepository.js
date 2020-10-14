@@ -1,11 +1,8 @@
 /* eslint-disable eqeqeq */
 
 const AbstractClubRepository = require('./abstractClubRepository');
-/* const Club = require('../../entity/club'); */
 const { fromModelToEntity } = require('../../mapper/clubMapper');
-/* const ClubNotDefinedError = require('../error/clubNotDefinedError'); */
 const ClubNotFoundError = require('../error/clubNotFoundError');
-/* const ClubIdNotDefinedError = require('../error/clubIdNotDefinedError'); */
 
 class ClubRepository extends AbstractClubRepository {
   /**
@@ -81,7 +78,7 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * @param {String} id
+   * @param {Number} id
    * @returns {Promise<Boolean>}
    */
   async delete(id) {
@@ -93,7 +90,7 @@ class ClubRepository extends AbstractClubRepository {
   }
 
   /**
-   * @param {String} id
+   * @param {Number} id
    * @returns {Promise<import("../../entity/club")>}
    */
   async getById(id) {

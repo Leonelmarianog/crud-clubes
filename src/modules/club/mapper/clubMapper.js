@@ -21,7 +21,7 @@ function fromDataToEntity({
   'fk-area-id': fk_area_id,
 }) {
   return new Club({
-    id,
+    id: Number(id),
     name,
     shortName,
     tla,
@@ -30,10 +30,10 @@ function fromDataToEntity({
     phone,
     website,
     email,
-    founded,
+    founded: Number(founded),
     clubColors,
     venue,
-    fk_area_id,
+    fk_area_id: Number(fk_area_id),
   });
 }
 

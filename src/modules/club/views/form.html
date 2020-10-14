@@ -25,8 +25,8 @@
   <div class="form-group">
     <label for="area" class="font-weight-bold">Area</label>
     <select class="form-control" id="area" name="fk-area-id" required>
-      {% for area in areas %}
       <option value="" {{ "selected" if club.id }}>Choose an area</option>
+      {% for area in areas %}
       <option value="{{ area.id }}" {{"selected" if club.area.id === area.id }}>{{ area.name }}</option>
       {% endfor %}
     </select>
@@ -41,7 +41,7 @@
   </div>
   <div class="form-group">
     <label for="phone" class="font-weight-bold">Phone</label>
-    <input type="number" class="form-control" name="phone" value="{{ club.phone }}" placeholder="{{ club.phone }}" required>
+    <input type="text" class="form-control" name="phone" value="{{ club.phone }}" placeholder="{{ club.phone }}" required>
   </div>
   <div class="form-group">
     <label for="website" class="font-weight-bold">Website</label>
@@ -53,7 +53,7 @@
   </div>
   <div class="form-group">
     <label for="founded" class="font-weight-bold">Founded</label>
-    <input type="text" class="form-control" name="founded" value="{{ club.founded }}" placeholder="{{ club.founded }}" required>
+    <input type="number" class="form-control" name="founded" value="{{ club.founded }}" placeholder="{{ club.founded }}" required>
   </div>
   <div class="form-group">
     <label for="club-colors" class="font-weight-bold">Club Colors</label>

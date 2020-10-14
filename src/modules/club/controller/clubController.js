@@ -22,11 +22,11 @@ class ClubController extends AbstractController {
     const ROUTE = this.ROUTE_BASE;
 
     app.get(`${ROUTE}`, this.index.bind(this));
-    app.get(`${ROUTE}/view/:id`, this.view.bind(this));
+    app.get(`${ROUTE}/view/:clubId`, this.view.bind(this));
     app.get(`${ROUTE}/create`, this.create.bind(this));
-    app.get(`${ROUTE}/update/:id`, this.update.bind(this));
+    app.get(`${ROUTE}/update/:clubId`, this.update.bind(this));
     app.post(`${ROUTE}/save`, this.uploadMiddleware.single('crest-url'), this.save.bind(this));
-    app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
+    app.get(`${ROUTE}/delete/:clubId`, this.delete.bind(this));
   }
 
   /**
@@ -47,10 +47,10 @@ class ClubController extends AbstractController {
    */
   async update(req, res) {
     try {
-      const { id: clubId } = req.params;
-      const clubToUpdate = await this.clubService.getById(clubId);
+      const { clubId } = req.params;
+      const club = await this.clubService.getById(clubId);
       const areas = await this.areaService.getAll();
-      res.render('club/views/form.html', { club: clubToUpdate, areas });
+      res.render('club/views/form.html', { club, areas });
     } catch (error) {
       req.session.error = error.message;
       res.redirect('/club');
@@ -73,7 +73,7 @@ class ClubController extends AbstractController {
    */
   async save(req, res) {
     try {
-      const clubData = { ...req.body };
+      const { body: clubData } = req;
       if (req.file) {
         const { path } = req.file;
         clubData['crest-url'] = `\\${path}`;
@@ -97,7 +97,7 @@ class ClubController extends AbstractController {
    */
   async delete(req, res) {
     try {
-      const { id: clubId } = req.params;
+      const { clubId } = req.params;
       const club = await this.clubService.getById(clubId);
       await this.clubService.delete(clubId);
       req.session.message = `Club ${club.name} with id ${club.id} successfully deleted`;
@@ -113,7 +113,7 @@ class ClubController extends AbstractController {
    */
   async view(req, res) {
     try {
-      const { id: clubId } = req.params;
+      const { clubId } = req.params;
       const club = await this.clubService.getById(clubId);
       res.render('club/views/club.html', { club });
     } catch (error) {

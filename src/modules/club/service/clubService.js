@@ -1,5 +1,4 @@
 const ClubNotDefinedError = require('./error/clubNotDefinedError');
-const ClubNotFoundError = require('./error/clubNotFoundError');
 const ClubIdNotDefinedError = require('./error/clubIdNotDefinedError');
 
 class ClubService {
@@ -23,7 +22,7 @@ class ClubService {
   }
 
   /**
-   * @param {String} id
+   * @param {Number} id
    * @returns {Boolean}
    */
   async delete(id) {
@@ -35,7 +34,7 @@ class ClubService {
   }
 
   /**
-   * @param {String} id
+   * @param {Number} id
    * @returns {import("../entity/club")}
    */
   async getById(id) {

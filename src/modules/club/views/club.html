@@ -11,10 +11,11 @@
   </div>
   <div class="col-sm-6 col-md-6 col-lg-6 mt-4 mt-sm-0">
     <ul class="list-group">
+        <li class="list-group-item"><strong>Id: </strong>{{ club.id }}</li>
         <li class="list-group-item"><strong>Name: </strong>{{ club.name }}</li>
         <li class="list-group-item"><strong>Short Name: </strong>{{ club.shortName }}</li>
         <li class="list-group-item"><strong>TLA: </strong>{{ club.tla }}</li>
-        <li class="list-group-item"><strong>Name: </strong>{{ club.area.name }}</li>
+        <li class="list-group-item"><strong>Area: </strong>{{ club.area.name }}</li>
         <li class="list-group-item"><strong>Address: </strong>{{ club.address }}</li>
         <li class="list-group-item"><strong>Phone: </strong>{{ club.phone }}</li>
         <li class="list-group-item"><strong>Website: </strong><a href="{{ club.website }}">{{ club.website }}</a></li>
