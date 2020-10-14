@@ -12,7 +12,14 @@ const clubServiceMock = {
   getAll: jest.fn(),
 };
 
-const clubController = new ClubController(uploadMiddlewareMock, clubServiceMock);
+const areaServiceMock = {
+  save: jest.fn(),
+  delete: jest.fn(),
+  getById: jest.fn(),
+  getAll: jest.fn(),
+};
+
+const clubController = new ClubController(uploadMiddlewareMock, clubServiceMock, areaServiceMock);
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -49,7 +56,7 @@ test('Index method renders index.html', async () => {
 
 test('View method renders the information of a specific club', async () => {
   const reqMock = {
-    params: { id: '1' },
+    params: { clubId: '1' },
   };
   const resMock = {
     render: jest.fn(),
@@ -59,14 +66,14 @@ test('View method renders the information of a specific club', async () => {
   await clubController.view(reqMock, resMock);
 
   expect(clubServiceMock.getById).toHaveBeenCalledTimes(1);
-  expect(clubServiceMock.getById).toHaveBeenCalledWith(reqMock.params.id);
+  expect(clubServiceMock.getById).toHaveBeenCalledWith(reqMock.params.clubId);
   expect(resMock.render).toHaveBeenCalledTimes(1);
   expect(resMock.render).toHaveBeenCalledWith('club/views/club.html', { club: {} });
 });
 
 test('View method sets an error message into the session and redirects to /club when an exception occurs', async () => {
   const reqMock = {
-    params: { id: '1' },
+    params: { clubId: '1' },
     session: { error: null },
   };
   const resMock = {
@@ -79,7 +86,7 @@ test('View method sets an error message into the session and redirects to /club 
   await clubController.view(reqMock, resMock);
 
   expect(clubServiceMock.getById).toHaveBeenCalledTimes(1);
-  expect(clubServiceMock.getById).toHaveBeenCalledWith(reqMock.params.id);
+  expect(clubServiceMock.getById).toHaveBeenCalledWith(reqMock.params.clubId);
   expect(reqMock.session.error).not.toBe(null);
   expect(resMock.redirect).toBeCalledTimes(1);
   expect(resMock.redirect).toHaveBeenCalledWith('/club');
@@ -90,33 +97,36 @@ test('Create method renders form.html', async () => {
   const resMock = {
     render: jest.fn(),
   };
+  areaServiceMock.getAll.mockResolvedValueOnce([]);
 
   await clubController.create(reqMock, resMock);
 
   expect(resMock.render).toHaveBeenCalledTimes(1);
-  expect(resMock.render).toHaveBeenCalledWith('club/views/form.html');
+  expect(resMock.render).toHaveBeenCalledWith('club/views/form.html', { areas: [] });
 });
 
 test('Update method renders form.html with information of a specific club', async () => {
   const reqMock = {
-    params: { id: '1' },
+    params: { clubId: '1' },
   };
   const resMock = {
     render: jest.fn(),
   };
   clubServiceMock.getById.mockResolvedValueOnce({});
+  areaServiceMock.getAll.mockResolvedValueOnce([]);
 
   await clubController.update(reqMock, resMock);
 
   expect(clubServiceMock.getById).toHaveBeenCalledTimes(1);
-  expect(clubServiceMock.getById).toHaveBeenCalledWith(reqMock.params.id);
+  expect(clubServiceMock.getById).toHaveBeenCalledWith(reqMock.params.clubId);
+  expect(areaServiceMock.getAll).toHaveBeenCalledTimes(1);
   expect(resMock.render).toHaveBeenCalledTimes(1);
-  expect(resMock.render).toHaveBeenCalledWith('club/views/form.html', { club: {} });
+  expect(resMock.render).toHaveBeenCalledWith('club/views/form.html', { club: {}, areas: [] });
 });
 
 test('Update method sets an error message into the session and redirects to /club when an exception occurs', async () => {
   const reqMock = {
-    params: { id: '1' },
+    params: { clubId: '1' },
     session: { error: null },
   };
   const resMock = {
@@ -129,7 +139,7 @@ test('Update method sets an error message into the session and redirects to /clu
   await clubController.update(reqMock, resMock);
 
   expect(clubServiceMock.getById).toHaveBeenCalledTimes(1);
-  expect(clubServiceMock.getById).toHaveBeenCalledWith(reqMock.params.id);
+  expect(clubServiceMock.getById).toHaveBeenCalledWith(reqMock.params.clubId);
   expect(reqMock.session.error).not.toBe(null);
   expect(resMock.redirect).toHaveBeenCalledTimes(1);
   expect(resMock.redirect).toHaveBeenCalledWith('/club');
@@ -137,7 +147,7 @@ test('Update method sets an error message into the session and redirects to /clu
 
 test('Delete method deletes a club, sets a message into the session, and redirects to /club', async () => {
   const reqMock = {
-    params: { id: '1' },
+    params: { clubId: '1' },
     session: { message: null },
   };
   const resMock = {
@@ -148,9 +158,9 @@ test('Delete method deletes a club, sets a message into the session, and redirec
   await clubController.delete(reqMock, resMock);
 
   expect(clubServiceMock.getById).toBeCalledTimes(1);
-  expect(clubServiceMock.getById).toBeCalledWith(reqMock.params.id);
+  expect(clubServiceMock.getById).toBeCalledWith(reqMock.params.clubId);
   expect(clubServiceMock.delete).toBeCalledTimes(1);
-  expect(clubServiceMock.delete).toBeCalledWith(reqMock.params.id);
+  expect(clubServiceMock.delete).toBeCalledWith(reqMock.params.clubId);
   expect(reqMock.session.message).not.toBe(null);
   expect(resMock.redirect).toBeCalledTimes(1);
   expect(resMock.redirect).toBeCalledWith('/club');
@@ -158,7 +168,7 @@ test('Delete method deletes a club, sets a message into the session, and redirec
 
 test('Delete method sets an error message into the session and redirects to /club when an exception occurs', async () => {
   const reqMock = {
-    params: { id: '1' },
+    params: { clubId: '1' },
     session: { error: null },
   };
   const resMock = {
@@ -171,7 +181,7 @@ test('Delete method sets an error message into the session and redirects to /clu
   await clubController.delete(reqMock, resMock);
 
   expect(clubServiceMock.getById).toBeCalledTimes(1);
-  expect(clubServiceMock.getById).toBeCalledWith(reqMock.params.id);
+  expect(clubServiceMock.getById).toBeCalledWith(reqMock.params.clubId);
   expect(reqMock.session.error).not.toBe(null);
   expect(resMock.redirect).toHaveBeenCalledTimes(1);
   expect(resMock.redirect).toHaveBeenCalledWith('/club');
@@ -182,11 +192,12 @@ test('Save method creates a new club when there is no id available', async () =>
     name: undefined,
     'short-name': undefined,
     tla: undefined,
+    'fk-area-id': '1',
     address: undefined,
     phone: undefined,
     website: undefined,
     email: undefined,
-    founded: undefined,
+    founded: '1234',
     'club-colors': undefined,
     venue: undefined,
   };
@@ -199,18 +210,22 @@ test('Save method creates a new club when there is no id available', async () =>
     redirect: jest.fn(),
   };
   const club = new Club({
-    id: undefined,
+    id: NaN,
     name: undefined,
     shortName: undefined,
     tla: undefined,
+    area: undefined,
     crestUrl: `\\${reqMock.file.path}`,
     address: undefined,
     phone: undefined,
     website: undefined,
     email: undefined,
-    founded: undefined,
+    founded: 1234,
     clubColors: undefined,
     venue: undefined,
+    createdAt: undefined,
+    lastUpdated: undefined,
+    fk_area_id: 1,
   });
 
   await clubController.save(reqMock, resMock);
@@ -227,11 +242,12 @@ test('Save method updates a club when there is an id available', async () => {
     name: undefined,
     'short-name': undefined,
     tla: undefined,
+    'fk-area-id': '1',
     address: undefined,
     phone: undefined,
     website: undefined,
     email: undefined,
-    founded: undefined,
+    founded: '1234',
     'club-colors': undefined,
     venue: undefined,
   };
@@ -244,18 +260,22 @@ test('Save method updates a club when there is an id available', async () => {
     redirect: jest.fn(),
   };
   const club = new Club({
-    id: '1',
+    id: 1,
     name: undefined,
     shortName: undefined,
     tla: undefined,
+    area: undefined,
     crestUrl: `\\${reqMock.file.path}`,
     address: undefined,
     phone: undefined,
     website: undefined,
     email: undefined,
-    founded: undefined,
+    founded: 1234,
     clubColors: undefined,
     venue: undefined,
+    createdAt: undefined,
+    lastUpdated: undefined,
+    fk_area_id: 1,
   });
 
   await clubController.save(reqMock, resMock);
@@ -272,11 +292,12 @@ test("Save method doesn't modify the request body when an image was not uploaded
     name: undefined,
     'short-name': undefined,
     tla: undefined,
+    'fk-area-id': '1',
     address: undefined,
     phone: undefined,
     website: undefined,
     email: undefined,
-    founded: undefined,
+    founded: '1234',
     'club-colors': undefined,
     venue: undefined,
   };
@@ -288,18 +309,22 @@ test("Save method doesn't modify the request body when an image was not uploaded
     redirect: jest.fn(),
   };
   const club = new Club({
-    id: '1',
+    id: 1,
     name: undefined,
     shortName: undefined,
     tla: undefined,
+    area: undefined,
     crestUrl: undefined,
     address: undefined,
     phone: undefined,
     website: undefined,
     email: undefined,
-    founded: undefined,
+    founded: 1234,
     clubColors: undefined,
     venue: undefined,
+    createdAt: undefined,
+    lastUpdated: undefined,
+    fk_area_id: 1,
   });
 
   await clubController.save(reqMock, resMock);

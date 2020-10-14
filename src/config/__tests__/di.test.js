@@ -9,7 +9,7 @@ describe('Dependency Injection Container', () => {
   });
 
   it('Contains common definitions', () => {
-    expect(container.get('MainDatabaseAdapter')).toBeDefined();
+    expect(container.get('Sequelize')).toBeDefined();
     expect(container.get('Multer')).toBeDefined();
     expect(container.get('Session')).toBeDefined();
   });
@@ -24,5 +24,13 @@ describe('Dependency Injection Container', () => {
     expect(container.get('ClubController')).toBeDefined();
     expect(container.get('ClubService')).toBeDefined();
     expect(container.get('ClubRepository')).toBeDefined();
+    expect(container.get('ClubModel')).toBeDefined();
+  });
+
+  it('Contains area definitions', () => {
+    expect(container.get('AreaController')).toBeDefined();
+    expect(container.get('AreaService')).toBeDefined();
+    expect(container.get('AreaRepository')).toBeDefined();
+    expect(container.get('AreaModel')).toBeDefined();
   });
 });

@@ -1,245 +1,206 @@
-const fs = require('fs');
-const Sqlite3Database = require('better-sqlite3');
+const { Sequelize } = require('sequelize');
 const ClubRepository = require('../clubRepository');
-const ClubNotFoundError = require('../../error/clubNotFoundError');
+const ClubModel = require('../../../model/clubModel');
+const AreaModel = require('../../../../area/model/areaModel');
 const Club = require('../../../entity/club');
+const ClubNotFoundError = require('../../error/clubNotFoundError');
 
-let mockDb;
-
-beforeEach(() => {
-  mockDb = new Sqlite3Database(':memory:');
-  const migration = fs.readFileSync('./src/config/tests.sql', 'utf-8');
-  mockDb.exec(migration);
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: ':memory:',
 });
 
-test('Saving a new club stores it in the database', async () => {
-  const clubRepository = new ClubRepository(mockDb);
+let clubRepository;
 
-  const club = await clubRepository.save(
-    new Club({
-      name: 'name',
-      shortName: 'shortname',
-      tla: 'tla',
-      crestUrl: 'crest',
-      address: 'address',
-      phone: 'phone number',
-      website: 'website',
-      email: 'email',
-      founded: 'founded year',
-      clubColors: 'club colors',
-      venue: 'venue',
-    })
+beforeAll(() => {
+  ClubModel.setup(sequelize);
+  AreaModel.setup(sequelize);
+  ClubModel.setAssociations(AreaModel);
+  clubRepository = new ClubRepository(ClubModel, AreaModel);
+});
+
+beforeEach(async () => {
+  await sequelize.sync({ force: true });
+
+  await ClubModel.create(
+    {
+      name: 'Arsenal FC',
+      shortName: 'Arsenal',
+      tla: 'ARS',
+      crestUrl: 'https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg',
+      address: '75 Drayton Park London N5 1BU',
+      phone: '+44 (020) 76195003',
+      website: 'http://www.arsenal.com',
+      email: 'info@arsenal.co.uk',
+      founded: 1886,
+      clubColors: 'Red / White',
+      venue: 'Emirates Stadium',
+      area: [{ name: 'England' }],
+    },
+    {
+      include: { model: AreaModel, as: 'area' },
+    }
   );
 
+  await ClubModel.create({
+    name: 'Everton FC',
+    shortName: 'Everton',
+    tla: 'EVE',
+    crestUrl: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg',
+    address: 'Goodison Park Liverpool L4 4EL',
+    phone: '+44 (0871) 6631878',
+    website: 'http://www.evertonfc.com',
+    email: 'everton@evertonfc.com',
+    founded: 1878,
+    clubColors: 'Blue / White',
+    venue: 'Goodison Park',
+    fk_area_id: 1,
+  });
+});
+
+test('save method stores a new club in the database when a club entity has no id', async () => {
+  const club = new Club({
+    id: undefined,
+    name: 'Arsenal FC',
+    shortName: 'Arsenal',
+    tla: 'ARS',
+    area: undefined,
+    crestUrl: 'https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg',
+    address: '75 Drayton Park London N5 1BU',
+    phone: '+44 (020) 76195003',
+    website: 'http://www.arsenal.com',
+    email: 'info@arsenal.co.uk',
+    founded: 1886,
+    clubColors: 'Red / White',
+    venue: 'Emirates Stadium',
+    createdAt: undefined,
+    lastUpdated: undefined,
+    fk_area_id: 1,
+  });
+
+  const savedClub = await clubRepository.save(club);
+
+  expect(savedClub).toBeInstanceOf(Club);
+  expect(savedClub.id).toBe(3);
+});
+
+test('save method updates an existent club in the database when a club entity has an id', async () => {
+  const club = new Club({
+    id: 1,
+    name: 'New Arsenal FC',
+    shortName: 'Arsenal',
+    tla: 'ARS',
+    area: undefined,
+    crestUrl: 'https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg',
+    address: '75 Drayton Park London N5 1BU',
+    phone: '+44 (020) 76195003',
+    website: 'http://www.arsenal.com',
+    email: 'info@arsenal.co.uk',
+    founded: 1886,
+    clubColors: 'Red / White',
+    venue: 'Emirates Stadium',
+    createdAt: undefined,
+    lastUpdated: undefined,
+    fk_area_id: 1,
+  });
+
+  const updatedClub = await clubRepository.save(club);
+
+  expect(updatedClub).toBeInstanceOf(Club);
+  expect(updatedClub.id).toBe(1);
+  expect(updatedClub.name).toBe('New Arsenal FC');
+});
+
+test("save method uses existent crest url if the club to update doesn't have one", async () => {
+  const club = new Club({
+    id: 1,
+    name: 'New Arsenal FC',
+    shortName: 'Arsenal',
+    tla: 'ARS',
+    area: undefined,
+    crestUrl: undefined,
+    address: '75 Drayton Park London N5 1BU',
+    phone: '+44 (020) 76195003',
+    website: 'http://www.arsenal.com',
+    email: 'info@arsenal.co.uk',
+    founded: 1886,
+    clubColors: 'Red / White',
+    venue: 'Emirates Stadium',
+    createdAt: undefined,
+    lastUpdated: undefined,
+    fk_area_id: 1,
+  });
+
+  const updatedClub = await clubRepository.save(club);
+
+  expect(updatedClub).toBeInstanceOf(Club);
+  expect(updatedClub.id).toBe(1);
+  expect(updatedClub.crestUrl).toBe(
+    'https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg'
+  );
+});
+
+test("save method throws an specific error when trying to update a club that doesn't exist", async () => {
+  const club = new Club({
+    id: 10,
+    name: 'Arsenal FC',
+    shortName: 'Arsenal',
+    tla: 'ARS',
+    area: undefined,
+    crestUrl: undefined,
+    address: '75 Drayton Park London N5 1BU',
+    phone: '+44 (020) 76195003',
+    website: 'http://www.arsenal.com',
+    email: 'info@arsenal.co.uk',
+    founded: 1886,
+    clubColors: 'Red / White',
+    venue: 'Emirates Stadium',
+    createdAt: undefined,
+    lastUpdated: undefined,
+    fk_area_id: 1,
+  });
+
+  await expect(clubRepository.save(club)).rejects.toThrowError(ClubNotFoundError);
+});
+
+test('delete method deletes a single club when an valid id is used', async () => {
+  const mockId = 1;
+  const isDeleted = await clubRepository.delete(mockId);
+
+  expect(isDeleted).toBeTruthy();
+});
+
+test('delete method throws an specific error when an invalid id is used', async () => {
+  const mockId = 10;
+
+  await expect(clubRepository.delete(mockId)).rejects.toThrowError(ClubNotFoundError);
+});
+
+test('getById method returns a single club entity when a valid id is used', async () => {
+  const mockId = 1;
+  const club = await clubRepository.getById(mockId);
+
+  expect(club).toBeInstanceOf(Club);
   expect(club.id).toBe(1);
 });
 
-test('Updating an existing club updates its values', async () => {
-  const clubRepository = new ClubRepository(mockDb);
+test('getById method throws an specific error when an invalid id is used', async () => {
+  const mockId = 10;
 
-  let club = await clubRepository.save(
-    new Club({
-      name: 'old name',
-      shortName: 'old shortname',
-      tla: 'old tla',
-      crestUrl: 'old crest',
-      address: 'old address',
-      phone: 'old phone number',
-      website: 'old website',
-      email: 'old email',
-      founded: 'old founded year',
-      clubColors: 'old club colors',
-      venue: 'old venue',
-    })
-  );
-
-  expect(club.id).toBe(1);
-
-  club = await clubRepository.save(
-    new Club({
-      id: 1,
-      name: 'new name',
-      shortName: 'new shortname',
-      tla: 'new tla',
-      crestUrl: 'new crest',
-      address: 'new address',
-      phone: 'new phone number',
-      website: 'new website',
-      email: 'new email',
-      founded: 'newd founded year',
-      clubColors: 'new club colors',
-      venue: 'new venue',
-    })
-  );
-
-  expect(club.id).toBe(1);
-  expect(club.name).not.toBe('old name');
-  expect(club.crestUrl).not.toBe('old crest');
+  await expect(clubRepository.getById(mockId)).rejects.toThrowError(ClubNotFoundError);
 });
 
-test('Not updating the crest of a club keeps the old one', async () => {
-  const clubRepository = new ClubRepository(mockDb);
-
-  let club = await clubRepository.save(
-    new Club({
-      name: 'old name',
-      shortName: 'old shortname',
-      tla: 'old tla',
-      crestUrl: 'old crest',
-      address: 'old address',
-      phone: 'old phone number',
-      website: 'old website',
-      email: 'old email',
-      founded: 'old founded year',
-      clubColors: 'old club colors',
-      venue: 'old venue',
-    })
-  );
-
-  club = await clubRepository.save(
-    new Club({
-      id: 1,
-      name: 'new name',
-      shortName: 'new shortname',
-      tla: 'new tla',
-      address: 'new address',
-      phone: 'new phone number',
-      website: 'new website',
-      email: 'new email',
-      founded: 'newd founded year',
-      clubColors: 'new club colors',
-      venue: 'new venue',
-    })
-  );
-
-  expect(club.crestUrl).toBe('old crest');
-});
-
-test('Trying to update a non existent club throws an specific error', async () => {
-  const clubRepository = new ClubRepository(mockDb);
-
-  await expect(
-    clubRepository.save(
-      new Club({
-        id: 1,
-        name: 'name',
-        shortName: 'shortname',
-        tla: 'tla',
-        crestUrl: 'crest',
-        address: 'address',
-        phone: 'phone number',
-        website: 'website',
-        email: 'email',
-        founded: 'founded year',
-        clubColors: 'club colors',
-        venue: 'venue',
-      })
-    )
-  ).rejects.toThrowError(ClubNotFoundError);
-});
-
-test('Deleting a specific club removes it from the database', async () => {
-  const clubRepository = new ClubRepository(mockDb);
-
-  const club = await clubRepository.save(
-    new Club({
-      name: 'name',
-      shortName: 'shortname',
-      tla: 'tla',
-      crestUrl: 'crest',
-      address: 'address',
-      phone: 'phone number',
-      website: 'website',
-      email: 'email',
-      founded: 'founded year',
-      clubColors: 'club colors',
-      venue: 'venue',
-    })
-  );
-
-  expect(club.id).toBe(1);
-  expect(await clubRepository.delete(club.id)).toBe(true);
-  await expect(clubRepository.getById(1)).rejects.toThrowError(ClubNotFoundError);
-});
-
-test('Trying to delete a non existent club throws an specific error', async () => {
-  const clubRepository = new ClubRepository(mockDb);
-
-  await expect(clubRepository.delete(1)).rejects.toThrowError(ClubNotFoundError);
-});
-
-test('Requesting a single club returns a club entity', async () => {
-  const clubRepository = new ClubRepository(mockDb);
-
-  const storedClub = await clubRepository.save(
-    new Club({
-      name: 'name',
-      shortName: 'shortname',
-      tla: 'tla',
-      crestUrl: 'crest',
-      address: 'address',
-      phone: 'phone number',
-      website: 'website',
-      email: 'email',
-      founded: 'founded year',
-      clubColors: 'club colors',
-      venue: 'venue',
-    })
-  );
-
-  const requestedClub = await clubRepository.getById(1);
-
-  expect(requestedClub).toEqual(storedClub);
-});
-
-test('Requesting a non existent club throws an specific error', async () => {
-  const clubRepository = new ClubRepository(mockDb);
-
-  await expect(clubRepository.getById(1)).rejects.toThrowError(ClubNotFoundError);
-});
-
-test('Requesting all clubes returns an array of club entities', async () => {
-  const clubRepository = new ClubRepository(mockDb);
-
-  const storedClub1 = await clubRepository.save(
-    new Club({
-      name: 'name',
-      shortName: 'shortname',
-      tla: 'tla',
-      crestUrl: 'crest',
-      address: 'address',
-      phone: 'phone number',
-      website: 'website',
-      email: 'email',
-      founded: 'founded year',
-      clubColors: 'club colors',
-      venue: 'venue',
-    })
-  );
-
-  const storedClub2 = await clubRepository.save(
-    new Club({
-      name: 'name',
-      shortName: 'shortname',
-      tla: 'tla',
-      crestUrl: 'crest',
-      address: 'address',
-      phone: 'phone number',
-      website: 'website',
-      email: 'email',
-      founded: 'founded year',
-      clubColors: 'club colors',
-      venue: 'venue',
-    })
-  );
-
+test('getAll method returns an array of club entities', async () => {
   const clubes = await clubRepository.getAll();
 
-  expect(clubes).toEqual([storedClub1, storedClub2]);
+  expect(Array.isArray(clubes)).toBeTruthy();
+  expect(clubes[0]).toBeInstanceOf(Club);
+  expect(clubes[1]).toBeInstanceOf(Club);
 });
 
-test('Requesting all clubes when there is none in the database returns an empty array', async () => {
-  const clubRepository = new ClubRepository(mockDb);
+test('getAll method returns an empty array when there are no clubes in the database', async () => {
+  await sequelize.sync({ force: true });
+
   const clubes = await clubRepository.getAll();
 
   expect(clubes).toEqual([]);
