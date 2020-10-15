@@ -92,17 +92,38 @@ test('View method sets an error message into the session and redirects to /club 
   expect(resMock.redirect).toHaveBeenCalledWith('/club');
 });
 
-test('Create method renders form.html', async () => {
+test('Create method renders form.html when there are areas available', async () => {
   const reqMock = {};
   const resMock = {
     render: jest.fn(),
   };
-  areaServiceMock.getAll.mockResolvedValueOnce([]);
+  const areasMock = ['Argentina'];
+  areaServiceMock.getAll.mockResolvedValueOnce(areasMock);
 
   await clubController.create(reqMock, resMock);
 
   expect(resMock.render).toHaveBeenCalledTimes(1);
-  expect(resMock.render).toHaveBeenCalledWith('club/views/form.html', { areas: [] });
+  expect(resMock.render).toHaveBeenCalledWith('club/views/form.html', { areas: areasMock });
+});
+
+test('Create method sets error message and redirects when there are no areas available', async () => {
+  const reqMock = {
+    session: {
+      error: null,
+    },
+  };
+  const resMock = {
+    redirect: jest.fn(),
+  };
+  const areasMock = [];
+  areaServiceMock.getAll.mockResolvedValueOnce(areasMock);
+
+  await clubController.create(reqMock, resMock);
+
+  expect(areaServiceMock.getAll).toHaveBeenCalledTimes(1);
+  expect(reqMock.session.error).not.toBe(null);
+  expect(resMock.redirect).toHaveBeenCalledTimes(1);
+  expect(resMock.redirect).toHaveBeenCalledWith('/club');
 });
 
 test('Update method renders form.html with information of a specific club', async () => {

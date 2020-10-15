@@ -64,7 +64,13 @@ class ClubController extends AbstractController {
   // eslint-disable-next-line class-methods-use-this
   async create(req, res) {
     const areas = await this.areaService.getAll();
-    res.render('club/views/form.html', { areas });
+
+    if (areas.length > 0) {
+      res.render('club/views/form.html', { areas });
+    } else {
+      req.session.error = 'To create new clubes, you need to create at least 1 area first';
+      res.redirect('/club');
+    }
   }
 
   /**
