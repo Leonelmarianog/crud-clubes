@@ -1,6 +1,9 @@
 require('dotenv').config();
 const configureDependencyInjection = require('../config/di');
 
+/**
+ * @type {import('rsdi').default} - DIC container
+ */
 const container = configureDependencyInjection();
 
 /**
@@ -18,7 +21,9 @@ const ClubModel = container.get('ClubModel');
  */
 const AreaModel = container.get('AreaModel');
 
-async function populateTables() {
+async function initDatabase() {
+  await mainDb.sync({ force: true });
+
   await ClubModel.create(
     {
       name: 'Arsenal FC',
@@ -55,8 +60,6 @@ async function populateTables() {
   });
 }
 
-(async () => {
-  await mainDb.sync({ force: true });
+initDatabase();
 
-  await populateTables();
-})();
+module.exports = initDatabase;
