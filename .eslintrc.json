@@ -5,9 +5,10 @@
     "node": true,
     "browser": true,
     "jquery": true,
-    "jest/globals": true
+    "jest/globals": true,
+    "cypress/globals": true
   },
-  "plugins": ["jest", "prettier"],
+  "plugins": ["jest", "cypress", "prettier"],
   "extends": ["airbnb-base", "prettier"],
   "parserOptions": {
     "ecmaVersion": 12
